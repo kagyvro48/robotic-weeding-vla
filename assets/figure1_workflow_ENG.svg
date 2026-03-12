@@ -1,0 +1,232 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 490" width="1400" height="490" font-family="Arial, Helvetica, sans-serif">
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#2255a4"/>
+    </marker>
+    <marker id="arrd" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0,10 3.5,0 7" fill="#999"/>
+    </marker>
+  </defs>
+
+  <!-- White background -->
+  <rect width="1400" height="490" fill="white"/>
+
+
+
+  <!-- ═══════════════════════════════════════════════
+       5 MAIN BLOCKS  — y=134, height=330
+       Block widths: 224px each, gap 8px
+       x: 20, 252, 484, 716, 948  (last block wider: 412)
+       Total: 20+224+8+224+8+224+8+224+8+412+8 ... adjust
+       Let's use equal 5 blocks of 248px, gap 8, starting x=20
+       x: 20, 276, 532, 788, 1044   width=248  total=1044+248+... 
+       Actually let's do: x=14, w=252, gap=7  → 5*(252+7)-7 = 1288, centered in 1400 → margin=56
+  ═══════════════════════════════════════════════ -->
+
+  <!-- Block x positions (margin 56, width 252, gap 10) -->
+  <!-- B1=56  B2=318  B3=580  B4=842  B5=1104   right edge=1356 -->
+
+  <!-- ─── BLOCK 1: Teleoperation & Recording ─── -->
+  <rect x="56" y="134" width="252" height="330" rx="8" fill="#e8eef8" stroke="#2255a4" stroke-width="1.8"/>
+  <!-- header -->
+  <rect x="56" y="134" width="252" height="52" rx="8" fill="#2255a4"/>
+  <rect x="56" y="162" width="252" height="24" fill="#2255a4"/>
+  <text x="182" y="158" text-anchor="middle" font-size="14.5" font-weight="bold" fill="white">1 · Teleoperation</text>
+  <text x="182" y="178" text-anchor="middle" font-size="14.5" font-weight="bold" fill="white">&amp; Recording</text>
+
+  <!-- Stick figure + leader→follower -->
+  <g transform="translate(182,238)">
+    <!-- person -->
+    <circle cx="-68" cy="-22" r="12" fill="none" stroke="#444" stroke-width="1.8"/>
+    <line x1="-68" y1="-10" x2="-68" y2="14" stroke="#444" stroke-width="1.8"/>
+    <line x1="-68" y1="0"  x2="-80" y2="12" stroke="#444" stroke-width="1.8"/>
+    <line x1="-68" y1="0"  x2="-56" y2="12" stroke="#444" stroke-width="1.8"/>
+    <line x1="-68" y1="14" x2="-76" y2="30" stroke="#444" stroke-width="1.8"/>
+    <line x1="-68" y1="14" x2="-60" y2="30" stroke="#444" stroke-width="1.8"/>
+    <!-- leader box -->
+    <rect x="-44" y="-12" width="36" height="22" rx="4" fill="#c8d8f0" stroke="#2255a4" stroke-width="1.3"/>
+    <text x="-26" y="3"  text-anchor="middle" font-size="10" font-weight="bold" fill="#2255a4">leader</text>
+    <!-- arrow -->
+    <line x1="-7" y1="-1" x2="6" y2="-1" stroke="#2255a4" stroke-width="1.8" marker-end="url(#arr)"/>
+    <!-- follower box -->
+    <rect x="8" y="-12" width="44" height="22" rx="4" fill="#c8d8f0" stroke="#2255a4" stroke-width="1.3"/>
+    <text x="30" y="3" text-anchor="middle" font-size="10" font-weight="bold" fill="#2255a4">follower</text>
+  </g>
+
+  <!-- divider -->
+  <line x1="72" y1="284" x2="292" y2="284" stroke="#b0bfd8" stroke-width="1"/>
+  <!-- text content -->
+  <text x="182" y="302" text-anchor="middle" font-size="12.5" fill="#222">SO-101 leader–follower</text>
+  <text x="182" y="320" text-anchor="middle" font-size="12.5" fill="#222">teleoperation</text>
+  <text x="182" y="342" text-anchor="middle" font-size="12.5" fill="#222">~30 FPS synchronized</text>
+  <text x="182" y="360" text-anchor="middle" font-size="12.5" fill="#222">with joint states</text>
+  <!-- divider -->
+  <line x1="72" y1="372" x2="292" y2="372" stroke="#b0bfd8" stroke-width="1"/>
+  <text x="182" y="390" text-anchor="middle" font-size="11.5" fill="#555">3 RGB cameras recorded</text>
+  <text x="182" y="407" text-anchor="middle" font-size="11" fill="#888">(eye-in-hand · front · top-down)</text>
+  <!-- compute tag -->
+  <rect x="72" y="424" width="220" height="22" rx="5" fill="#c8d8f0" stroke="#9ab0d0" stroke-width="1"/>
+  <text x="182" y="439" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#2255a4">Compute: Local PC</text>
+
+  <!-- ─── ARROW 1→2 ─── -->
+  <line x1="310" y1="300" x2="314" y2="300" stroke="#2255a4" stroke-width="2.8" marker-end="url(#arr)"/>
+
+  <!-- ─── BLOCK 2: Dataset Construction ─── -->
+  <rect x="318" y="134" width="252" height="330" rx="8" fill="#e8eef8" stroke="#2255a4" stroke-width="1.8"/>
+  <rect x="318" y="134" width="252" height="52" rx="8" fill="#2255a4"/>
+  <rect x="318" y="162" width="252" height="24" fill="#2255a4"/>
+  <text x="444" y="158" text-anchor="middle" font-size="14.5" font-weight="bold" fill="white">2 · Dataset</text>
+  <text x="444" y="178" text-anchor="middle" font-size="14.5" font-weight="bold" fill="white">Construction</text>
+
+  <!-- Database stack icon -->
+  <g transform="translate(444,238)">
+    <ellipse cx="0" cy="24" rx="42" ry="11" fill="#8dafd8" stroke="#2255a4" stroke-width="1.3"/>
+    <ellipse cx="0" cy="12" rx="42" ry="11" fill="#a8c4e8" stroke="#2255a4" stroke-width="1.3"/>
+    <ellipse cx="0" cy="0"  rx="42" ry="11" fill="#c8d8f0" stroke="#2255a4" stroke-width="1.3"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#2255a4">400 episodes</text>
+  </g>
+
+  <line x1="334" y1="284" x2="554" y2="284" stroke="#b0bfd8" stroke-width="1"/>
+  <text x="444" y="302" text-anchor="middle" font-size="12.5" fill="#222">Single-task dataset:</text>
+  <text x="444" y="320" text-anchor="middle" font-size="12.5" fill="#222">400 valid episodes</text>
+  <text x="444" y="342" text-anchor="middle" font-size="12.5" fill="#222">Recorded with 3 cameras</text>
+  <line x1="334" y1="356" x2="554" y2="356" stroke="#b0bfd8" stroke-width="1"/>
+  <text x="444" y="374" text-anchor="middle" font-size="12" fill="#444" font-weight="bold">Training subsets:</text>
+  <text x="444" y="392" text-anchor="middle" font-size="12" fill="#555">2-cam (primary models)</text>
+  <text x="444" y="410" text-anchor="middle" font-size="12" fill="#555">3-cam (ablation only)</text>
+  <rect x="334" y="424" width="220" height="22" rx="5" fill="#c8d8f0" stroke="#9ab0d0" stroke-width="1"/>
+  <text x="444" y="439" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#2255a4">Compute: Local PC</text>
+
+  <!-- ─── ARROW 2→3 ─── -->
+  <line x1="572" y1="300" x2="576" y2="300" stroke="#2255a4" stroke-width="2.8" marker-end="url(#arr)"/>
+
+  <!-- ─── BLOCK 3: Model Training ─── -->
+  <rect x="580" y="134" width="252" height="330" rx="8" fill="#e8eef8" stroke="#2255a4" stroke-width="1.8"/>
+  <rect x="580" y="134" width="252" height="52" rx="8" fill="#2255a4"/>
+  <rect x="580" y="162" width="252" height="24" fill="#2255a4"/>
+  <text x="706" y="158" text-anchor="middle" font-size="14.5" font-weight="bold" fill="white">3 · Model</text>
+  <text x="706" y="178" text-anchor="middle" font-size="14.5" font-weight="bold" fill="white">Training</text>
+
+  <!-- GPU chip icon — clean, readable -->
+  <g transform="translate(706,235)">
+    <rect x="-36" y="-24" width="72" height="48" rx="6" fill="#c8d8f0" stroke="#2255a4" stroke-width="1.6"/>
+    <rect x="-24" y="-14" width="48" height="28" rx="3" fill="#2255a4"/>
+    <text x="0" y="8" text-anchor="middle" font-size="13" fill="white" font-weight="bold">GPU</text>
+    <!-- left pins -->
+    <line x1="-36" y1="-12" x2="-46" y2="-12" stroke="#555" stroke-width="1.4"/>
+    <line x1="-36" y1="-3"  x2="-46" y2="-3"  stroke="#555" stroke-width="1.4"/>
+    <line x1="-36" y1="6"   x2="-46" y2="6"   stroke="#555" stroke-width="1.4"/>
+    <line x1="-36" y1="15"  x2="-46" y2="15"  stroke="#555" stroke-width="1.4"/>
+    <!-- right pins -->
+    <line x1="36" y1="-12" x2="46" y2="-12" stroke="#555" stroke-width="1.4"/>
+    <line x1="36" y1="-3"  x2="46" y2="-3"  stroke="#555" stroke-width="1.4"/>
+    <line x1="36" y1="6"   x2="46" y2="6"   stroke="#555" stroke-width="1.4"/>
+    <line x1="36" y1="15"  x2="46" y2="15"  stroke="#555" stroke-width="1.4"/>
+  </g>
+
+  <line x1="596" y1="284" x2="816" y2="284" stroke="#b0bfd8" stroke-width="1"/>
+  <text x="706" y="302" text-anchor="middle" font-size="12.5" fill="#222">Train: ACT, π0,</text>
+  <text x="706" y="320" text-anchor="middle" font-size="12.5" fill="#222">SmolVLA, X-VLA</text>
+  <text x="706" y="342" text-anchor="middle" font-size="12.5" fill="#222">All models trained on A100</text>
+  <line x1="596" y1="356" x2="816" y2="356" stroke="#b0bfd8" stroke-width="1"/>
+  <text x="706" y="374" text-anchor="middle" font-size="12" fill="#555">2-cam models (primary)</text>
+  <text x="706" y="392" text-anchor="middle" font-size="12" fill="#555">3-cam model (ACT ablation)</text>
+  <text x="706" y="410" text-anchor="middle" font-size="11" fill="#888">LeRobot training pipeline</text>
+  <rect x="596" y="424" width="220" height="22" rx="5" fill="#c8d8f0" stroke="#9ab0d0" stroke-width="1"/>
+  <text x="706" y="439" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#2255a4">Compute: A100 server (UQAR)</text>
+
+  <!-- ─── ARROW 3→4 ─── -->
+  <line x1="834" y1="300" x2="838" y2="300" stroke="#2255a4" stroke-width="2.8" marker-end="url(#arr)"/>
+
+  <!-- ─── BLOCK 4: Systematic Evaluation ─── -->
+  <rect x="842" y="134" width="252" height="330" rx="8" fill="#e8eef8" stroke="#2255a4" stroke-width="1.8"/>
+  <rect x="842" y="134" width="252" height="52" rx="8" fill="#2255a4"/>
+  <rect x="842" y="162" width="252" height="24" fill="#2255a4"/>
+  <text x="968" y="158" text-anchor="middle" font-size="14.5" font-weight="bold" fill="white">4 · Systematic</text>
+  <text x="968" y="178" text-anchor="middle" font-size="14.5" font-weight="bold" fill="white">Evaluation</text>
+
+  <!-- Grid icon: 4 conditions × 2 columns, no repetitions -->
+  <g transform="translate(968,235)">
+    <rect x="-40" y="-26" width="80" height="52" rx="4" fill="#c8d8f0" stroke="#2255a4" stroke-width="1.3"/>
+    <!-- vertical divider -->
+    <line x1="0" y1="-26" x2="0" y2="26" stroke="#2255a4" stroke-width="1"/>
+    <!-- horizontal dividers -->
+    <line x1="-40" y1="-13" x2="40" y2="-13" stroke="#2255a4" stroke-width="0.8"/>
+    <line x1="-40" y1="0"   x2="40" y2="0"   stroke="#2255a4" stroke-width="0.8"/>
+    <line x1="-40" y1="13"  x2="40" y2="13"  stroke="#2255a4" stroke-width="0.8"/>
+    <!-- labels col 1 -->
+    <text x="-20" y="-16" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#2255a4">C1</text>
+    <text x="-20" y="-3"  text-anchor="middle" font-size="9.5" font-weight="bold" fill="#2255a4">C2</text>
+    <text x="-20" y="10"  text-anchor="middle" font-size="9.5" font-weight="bold" fill="#2255a4">C3</text>
+    <text x="-20" y="23"  text-anchor="middle" font-size="9.5" font-weight="bold" fill="#2255a4">C4</text>
+    <!-- labels col 2 -->
+    <text x="20" y="-16" text-anchor="middle" font-size="9" fill="#444">25 trials</text>
+    <text x="20" y="-3"  text-anchor="middle" font-size="9" fill="#444">25 trials</text>
+    <text x="20" y="10"  text-anchor="middle" font-size="9" fill="#444">25 trials</text>
+    <text x="20" y="23"  text-anchor="middle" font-size="9" fill="#444">25 trials</text>
+  </g>
+
+  <line x1="858" y1="284" x2="1078" y2="284" stroke="#b0bfd8" stroke-width="1"/>
+  <text x="968" y="302" text-anchor="middle" font-size="12.5" fill="#222">C1–C4, 25 trials /</text>
+  <text x="968" y="320" text-anchor="middle" font-size="12.5" fill="#222">condition / model</text>
+  <text x="968" y="342" text-anchor="middle" font-size="12" fill="#222">Success: grasp→pull→</text>
+  <text x="968" y="360" text-anchor="middle" font-size="12" fill="#222">place→rest ≤60 s</text>
+  <line x1="858" y1="372" x2="1078" y2="372" stroke="#b0bfd8" stroke-width="1"/>
+  <text x="968" y="390" text-anchor="middle" font-size="12" fill="#222">ACT · SmolVLA · X-VLA: local GPU</text>
+  <text x="968" y="409" text-anchor="middle" font-size="12" fill="#222">π0: async inference on A100</text>
+  <rect x="858" y="424" width="220" height="22" rx="5" fill="#c8d8f0" stroke="#9ab0d0" stroke-width="1"/>
+  <text x="968" y="439" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#2255a4">Compute: Local GPU (· A100 for π0)</text>
+
+  <!-- ─── ARROW 4→5 ─── -->
+  <line x1="1096" y1="300" x2="1100" y2="300" stroke="#2255a4" stroke-width="2.8" marker-end="url(#arr)"/>
+
+  <!-- ─── BLOCK 5: Embedded Deployment + Camera Ablation ─── -->
+  <rect x="1104" y="134" width="280" height="330" rx="8" fill="#e8eef8" stroke="#2255a4" stroke-width="1.8"/>
+  <rect x="1104" y="134" width="280" height="52" rx="8" fill="#2255a4"/>
+  <rect x="1104" y="162" width="280" height="24" fill="#2255a4"/>
+  <text x="1244" y="155" text-anchor="middle" font-size="13.5" font-weight="bold" fill="white">5 · Embedded Deployment</text>
+  <text x="1244" y="175" text-anchor="middle" font-size="13" font-weight="bold" fill="white">+ Camera Ablation</text>
+
+  <!-- Jetson chip icon — clean -->
+  <g transform="translate(1244,235)">
+    <rect x="-40" y="-26" width="80" height="52" rx="6" fill="#a8c4e0" stroke="#2255a4" stroke-width="1.6"/>
+    <rect x="-26" y="-16" width="52" height="32" rx="3" fill="#2255a4"/>
+    <text x="0" y="7" text-anchor="middle" font-size="11.5" fill="white" font-weight="bold">Jetson</text>
+    <!-- left pins -->
+    <line x1="-40" y1="-14" x2="-50" y2="-14" stroke="#555" stroke-width="1.4"/>
+    <line x1="-40" y1="-5"  x2="-50" y2="-5"  stroke="#555" stroke-width="1.4"/>
+    <line x1="-40" y1="4"   x2="-50" y2="4"   stroke="#555" stroke-width="1.4"/>
+    <line x1="-40" y1="13"  x2="-50" y2="13"  stroke="#555" stroke-width="1.4"/>
+    <!-- right circles (ports) -->
+    <circle cx="34" cy="-10" r="6" fill="#c8d8f0" stroke="#2255a4" stroke-width="1"/>
+    <circle cx="34" cy="8"   r="6" fill="#c8d8f0" stroke="#2255a4" stroke-width="1"/>
+  </g>
+
+  <line x1="1120" y1="284" x2="1368" y2="284" stroke="#b0bfd8" stroke-width="1"/>
+
+  <!-- vertical divider between two sub-columns -->
+  <line x1="1244" y1="290" x2="1244" y2="420" stroke="#b0bfd8" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Left sub: Embedded Test -->
+  <text x="1172" y="306" text-anchor="middle" font-size="12" font-weight="bold" fill="#2255a4">Embedded test:</text>
+  <text x="1172" y="324" text-anchor="middle" font-size="11.5" fill="#222">ACT (2-cam), C2</text>
+  <text x="1172" y="341" text-anchor="middle" font-size="11.5" fill="#222">n=25 on Jetson</text>
+  <text x="1172" y="358" text-anchor="middle" font-size="11.5" fill="#222">Orin Nano 8GB</text>
+
+  <!-- Right sub: Camera Ablation -->
+  <text x="1316" y="306" text-anchor="middle" font-size="12" font-weight="bold" fill="#2255a4">Camera ablation:</text>
+  <text x="1316" y="324" text-anchor="middle" font-size="11.5" fill="#222">ACT (2-cam vs</text>
+  <text x="1316" y="341" text-anchor="middle" font-size="11.5" fill="#222">3-cam), C2</text>
+  <text x="1316" y="358" text-anchor="middle" font-size="11.5" fill="#222">n=25</text>
+
+  <line x1="1120" y1="372" x2="1368" y2="372" stroke="#b0bfd8" stroke-width="1"/>
+  <text x="1244" y="391" text-anchor="middle" font-size="11.5" fill="#555">Embedded execution evaluated</text>
+  <text x="1244" y="408" text-anchor="middle" font-size="11" fill="#888">Effect of top-down view assessed</text>
+
+  <rect x="1120" y="424" width="248" height="22" rx="5" fill="#c8d8f0" stroke="#9ab0d0" stroke-width="1"/>
+  <text x="1244" y="439" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#2255a4">Compute: Jetson Orin Nano 8GB</text>
+
+
+
+</svg>
