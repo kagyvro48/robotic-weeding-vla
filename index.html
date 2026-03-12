@@ -611,10 +611,22 @@
       </table>
     </div>
 
-    <div class="ph" style="margin-top:18px;">
-      <div class="phi">📊</div>
-      <strong id="results-fig-title">Figure — Dégradation des performances selon la complexité (C1 → C4)</strong>
-      <span class="ph-label">Image à compléter — en cours</span>
+    <div class="fig-wrap" style="margin-top:18px;">
+      <img
+        src="assets/figure9_degradation_C1_C3.svg"
+        id="fig9-img"
+        alt="Figure 9 — Profils de dégradation des performances (C1 → C3)"
+        style="width:100%; display:block;"
+        onerror="this.style.display='none'; document.getElementById('fig9-ph').style.display='flex';"
+      >
+      <div class="ph" id="fig9-ph" style="display:none; margin-top:0;">
+        <div class="phi">📊</div>
+        <strong>Figure 9 — Profils de dégradation (C1 → C3)</strong><br>
+        <span class="ph-label">assets/figure9_degradation_C1_C3.svg</span>
+      </div>
+      <p class="fig-caption">
+        <strong>Figure 9</strong> — <span id="results-fig-title">Profils de dégradation des performances selon la complexité croissante (C1 → C2 → C3). Les courbes représentent le taux de succès (%) pour chaque modèle.</span>
+      </p>
     </div>
 
     <div class="info-box" id="results-analysis">
@@ -666,16 +678,16 @@
       <table>
         <thead><tr><th id="mod-th1">Modèle</th><th id="mod-th2">Type</th><th>Steps</th><th>Batch</th><th id="mod-th5">Durée</th><th>HuggingFace</th></tr></thead>
         <tbody>
-          <tr><td><strong>ACT</strong> (2 cams)</td><td id="mod-r1t">Visuomoteur BC + chunking</td><td>100 000</td><td>8</td><td>2h 07 min</td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green);font-weight:600;" id="hf-see">🤗 Voir</a></td></tr>
-          <tr><td><strong>ACT</strong> (3 cams — ablation)</td><td>Visuomoteur BC + chunking</td><td>100 000</td><td>8</td><td>4h 28 min</td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
-          <tr><td><strong>π₀</strong></td><td id="mod-r3t">VLA Flow matching (PaliGemma)</td><td id="mod-r3s">15 000 retenus*</td><td>32</td><td>1j 15h 14 min</td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
-          <tr><td><strong>SmolVLA</strong></td><td id="mod-r4t">VLA compact Flow matching**</td><td>15 000</td><td>32</td><td>2h 50 min</td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
-          <tr><td><strong>XVLA</strong></td><td id="mod-r5t">VLA Soft prompts inter-embodiment**</td><td>15 000</td><td>32</td><td>2h 50 min</td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
+          <tr><td><strong>ACT</strong> (2 cams)</td><td id="mod-r1t">Visuomoteur BC + chunking</td><td>100 000</td><td>8</td><td>2h 07 min</td><td><a href="https://huggingface.co/kagyvro48/ACT-400-front-eye/tree/main" target="_blank" style="color:var(--green);font-weight:600;" id="hf-see">🤗 Voir</a></td></tr>
+          <tr><td><strong>ACT</strong> (3 cams — ablation)</td><td>Visuomoteur BC + chunking</td><td>100 000</td><td>8</td><td>4h 28 min</td><td><a href="https://huggingface.co/kagyvro48/ACT-400/tree/main" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
+          <tr><td><strong>π₀</strong></td><td id="mod-r3t">VLA Flow matching (PaliGemma)</td><td id="mod-r3s">15 000 retenus*</td><td>32</td><td>1j 15h 14 min</td><td><a href="https://huggingface.co/kagyvro48/Pi0-V1-400-15k-front-eye/tree/main" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
+          <tr><td><strong>SmolVLA</strong></td><td id="mod-r4t">VLA compact Flow matching</td><td id="mod-r4s">15 000 retenus*</td><td>64</td><td>4h 57 min</td><td><a href="https://huggingface.co/kagyvro48/SmolVLA-400-15k-front-eye/tree/main" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
+          <tr><td><strong>XVLA</strong></td><td id="mod-r5t">VLA Soft prompts inter-embodiment**</td><td>15 000</td><td>32</td><td>2h 50 min</td><td><a href="https://huggingface.co/kagyvro48/XVLA-400-15k-front-eye/tree/main" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
         </tbody>
       </table>
     </div>
-    <p class="note" id="mod-note1">* π₀ : 30 000 steps entraînés, checkpoint à 15 000 retenu (meilleure validation). lr = 2,5e-5, weight_decay = 0,01, dtype = bfloat16.</p>
-    <p class="note" id="mod-note2">** SmolVLA &amp; XVLA : freeze_vision_encoder = true, freeze_language_encoder = true, train_policy_transformer = true, action_mode = auto.</p>
+    <p class="note" id="mod-note1">* π₀ et SmolVLA : 30 000 steps entraînés, checkpoint à 15 000 retenu (meilleur taux de succès en rollout). lr = 2,5e-5 (π₀), weight_decay = 0,01, dtype = bfloat16.</p>
+    <p class="note" id="mod-note2">** XVLA : freeze_vision_encoder = true, freeze_language_encoder = true, train_policy_transformer = true, train_soft_prompts = true, action_mode = auto.</p>
   </section>
 
   <!-- ══ RESSOURCES ══ -->
@@ -694,29 +706,29 @@
       <table>
         <thead><tr><th id="eval-th1">Modèle</th><th>C1</th><th>C2</th><th>C3</th><th>C4*</th><th>Ablation</th><th>Jetson</th></tr></thead>
         <tbody>
-          <tr><td><strong>ACT</strong></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td></tr>
-          <tr><td><strong>π₀</strong></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td></tr>
-          <tr><td><strong>SmolVLA</strong></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td></tr>
-          <tr><td><strong>XVLA</strong></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td></tr>
+          <tr><td><strong>ACT</strong></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_ACT-C1/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_ACT-C2/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_ACT-C3/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_ACT-C4/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_ABLATION-ACT-C2-3CAMERAS/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_ACT-C2-JETSON-ORIN-NANO/tree/main" target="_blank" style="color:var(--green)">🔗</a></td></tr>
+          <tr><td><strong>π₀</strong></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_PI0-C1/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_PI0-C2/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_PI0-C3/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_PI0-C4/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td></tr>
+          <tr><td><strong>SmolVLA</strong></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_SMOLVLA-C1/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_SMOLVLA-C2/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_SMOLVLA-C3/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_SMOLVLA-C4/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td></tr>
+          <tr><td><strong>XVLA</strong></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_XVLA-C1/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_XVLA-C2/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_XVLA-C3/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/datasets/kagyvro48/EVAL_XVLA-C4/tree/main" target="_blank" style="color:var(--green)">🔗</a></td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td></tr>
         </tbody>
       </table>
     </div>
 
-    <h3 id="res-collect-title" style="font-size:15px;font-weight:700;color:var(--blue);margin-top:26px;margin-bottom:12px;">Tables de collecte &amp; Scènes <span class="badge-wip" data-fr="Liens en cours" data-en="Links coming soon">Liens en cours</span></h3>
+    <h3 id="res-collect-title" style="font-size:15px;font-weight:700;color:var(--blue);margin-top:26px;margin-bottom:12px;">Tables de collecte &amp; Scènes (Zenodo)</h3>
     <div class="tbl-wrap">
       <table>
-        <thead><tr><th id="coll-th1">Document</th><th id="coll-th2">Essais</th><th id="coll-th3">Accès Google Drive</th></tr></thead>
+        <thead><tr><th id="coll-th1">Document</th><th id="coll-th2">Essais</th><th id="coll-th3">Zenodo</th></tr></thead>
         <tbody>
-          <tr><td id="coll-r1">ACT — C1 à C4</td><td id="coll-r1t">100 essais</td><td><em id="wip1" style="color:var(--muted)">En cours</em></td></tr>
-          <tr><td id="coll-r2">π₀ — C1 à C4</td><td id="coll-r2t">100 essais</td><td><em id="wip2" style="color:var(--muted)">En cours</em></td></tr>
-          <tr><td id="coll-r3">SmolVLA — C1 à C4</td><td id="coll-r3t">100 essais</td><td><em id="wip3" style="color:var(--muted)">En cours</em></td></tr>
-          <tr><td id="coll-r4">XVLA — C1 à C4</td><td id="coll-r4t">100 essais</td><td><em id="wip4" style="color:var(--muted)">En cours</em></td></tr>
-          <tr><td id="coll-r5">ACT — Ablation 3 caméras / C2</td><td id="coll-r5t">25 essais</td><td><em id="wip5" style="color:var(--muted)">En cours</em></td></tr>
-          <tr><td id="coll-r6">ACT — Jetson Orin Nano / C2</td><td id="coll-r6t">25 essais</td><td><em id="wip6" style="color:var(--muted)">En cours</em></td></tr>
+          <tr><td id="coll-r1">ACT — C1 à C4</td><td id="coll-r1t">100 essais</td><td><a href="https://zenodo.org/records/18933451/files/ACT_Collection_Tables_C1-C4_EN.pdf?download=1" target="_blank" style="color:var(--green);font-weight:600;">📄 PDF</a></td></tr>
+          <tr><td id="coll-r2">π₀ — C1 à C4</td><td id="coll-r2t">100 essais</td><td><a href="https://zenodo.org/records/18933451/files/Pi0_Collection_Tables_C1-C4_EN.pdf?download=1" target="_blank" style="color:var(--green);font-weight:600;">📄 PDF</a></td></tr>
+          <tr><td id="coll-r3">SmolVLA — C1 à C4</td><td id="coll-r3t">100 essais</td><td><a href="https://zenodo.org/records/18933451/files/SmolVLA_Collection_Tables_C1-C4_EN.pdf?download=1" target="_blank" style="color:var(--green);font-weight:600;">📄 PDF</a></td></tr>
+          <tr><td id="coll-r4">XVLA — C1 à C4</td><td id="coll-r4t">100 essais</td><td><a href="https://zenodo.org/records/18933451/files/XVLA_Collection_Tables_C1-C4_EN.pdf?download=1" target="_blank" style="color:var(--green);font-weight:600;">📄 PDF</a></td></tr>
+          <tr><td id="coll-r5">ACT — Ablation 3 caméras / C2</td><td id="coll-r5t">25 essais</td><td><a href="https://zenodo.org/records/18933451/files/ACT_Ablation_3Camera_C2_EN.pdf?download=1" target="_blank" style="color:var(--green);font-weight:600;">📄 PDF</a></td></tr>
+          <tr><td id="coll-r6">ACT — Jetson Orin Nano / C2</td><td id="coll-r6t">25 essais</td><td><a href="https://zenodo.org/records/18933451/files/ACT_Jetson_Orin_Nano_C2_EN.pdf?download=1" target="_blank" style="color:var(--green);font-weight:600;">📄 PDF</a></td></tr>
         </tbody>
       </table>
     </div>
-    <p class="note" id="res-note">Datasets et modèles sur HuggingFace (profil : kagyvro48). Tables de collecte et scènes sur Google Drive (liens à venir).</p>
+    <p class="note" id="res-note">Datasets et modèles sur <a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">HuggingFace (kagyvro48)</a>. Tables de collecte et scènes sur <a href="https://doi.org/10.5281/zenodo.18933451" target="_blank" style="color:var(--green)">Zenodo</a>. Scènes expérimentales : <a href="https://doi.org/10.5281/zenodo.18942142" target="_blank" style="color:var(--green)">DOI:10.5281/zenodo.18942142</a>.</p>
   </section>
 
   <!-- ══ CITATION ══ -->
@@ -966,7 +978,7 @@
       ? '* C4 : comportement immobile appris. SmolVLA / ACT / π₀ : robot immobile = codé succès. XVLA : tente d\'agir mais cible les distracteurs ronds.'
       : '* C4: stationary behavior learned from demonstrations. SmolVLA / ACT / π₀: immobile robot = coded as success. XVLA: attempts action but targets round distractors.';
 
-    t('results-fig-title', fr?'Figure — Dégradation des performances selon la complexité (C1 → C4)':'Figure — Performance degradation with increasing complexity (C1 → C4)');
+    t('results-fig-title', fr?'Profils de dégradation des performances selon la complexité croissante (C1 → C2 → C3). Les courbes représentent le taux de succès (%) pour chaque modèle.':'Performance degradation profiles with increasing complexity (C1 → C2 → C3). Curves represent the success rate (%) for each model.');
 
     t('results-analysis-title', fr?'Analyse par condition :':'Per-condition analysis:');
     const rab = document.getElementById('results-analysis-body');
@@ -996,17 +1008,19 @@
     t('mod-r1t', fr?'Visuomoteur BC + chunking':'Visuomotor BC + chunking');
     t('mod-r3t', fr?'VLA Flow matching (PaliGemma)':'VLA Flow matching (PaliGemma)');
     t('mod-r3s', fr?'15 000 retenus*':'15,000 retained*');
-    t('mod-r4t', fr?'VLA compact Flow matching**':'Compact VLA Flow matching**');
+    t('mod-r4t', fr?'VLA compact Flow matching':'Compact VLA Flow matching');
+    t('mod-r4s', fr?'15 000 retenus*':'15,000 retained*');
     t('mod-r5t', fr?'VLA Soft prompts inter-embodiment**':'VLA Soft prompts cross-embodiment**');
-    document.querySelectorAll('#hf-see, [href="https://huggingface.co/kagyvro48"]').forEach(el => {
+    document.querySelectorAll('a[href*="huggingface.co/kagyvro48"]').forEach(el => {
       if (el.textContent.includes('Voir') || el.textContent.includes('See')) el.textContent = '🤗 ' + (fr?'Voir':'See');
+      if (el.textContent.includes('PDF')) el.textContent = '📄 PDF';
     });
     t('mod-note1', fr
-      ? '* π₀ : 30 000 steps entraînés, checkpoint à 15 000 retenu (meilleure validation). lr = 2,5e-5, weight_decay = 0,01, dtype = bfloat16.'
-      : '* π₀: 30,000 steps trained, checkpoint at 15,000 retained (best validation). lr = 2.5e-5, weight_decay = 0.01, dtype = bfloat16.');
+      ? '* π₀ et SmolVLA : 30 000 steps entraînés, checkpoint à 15 000 retenu (meilleur taux de succès en rollout). lr = 2,5e-5 (π₀), weight_decay = 0,01, dtype = bfloat16.'
+      : '* π₀ and SmolVLA: 30,000 steps trained, checkpoint at 15,000 retained (best rollout success rate). lr = 2.5e-5 (π₀), weight_decay = 0.01, dtype = bfloat16.');
     t('mod-note2', fr
-      ? '** SmolVLA & XVLA : freeze_vision_encoder = true, freeze_language_encoder = true, train_policy_transformer = true, action_mode = auto.'
-      : '** SmolVLA & XVLA: freeze_vision_encoder = true, freeze_language_encoder = true, train_policy_transformer = true, action_mode = auto.');
+      ? '** XVLA : freeze_vision_encoder = true, freeze_language_encoder = true, train_policy_transformer = true, train_soft_prompts = true, action_mode = auto.'
+      : '** XVLA: freeze_vision_encoder = true, freeze_language_encoder = true, train_policy_transformer = true, train_soft_prompts = true, action_mode = auto.');
 
     // ── Resources ──
     t('res-train-title', fr?'Datasets d\'entraînement (HuggingFace)':'Training datasets (HuggingFace)');
@@ -1016,18 +1030,17 @@
     t('ds2-sub', fr?'Front + Eye + Top-down · 400 épisodes':'Front + Eye + Top-down · 400 episodes');
     t('res-eval-title', fr?'Datasets d\'évaluation (HuggingFace)':'Evaluation datasets (HuggingFace)');
     t('eval-th1', fr?'Modèle':'Model');
-    t('res-collect-title', fr?'Tables de collecte & Scènes':'Collection tables & Scenes');
-    t('coll-th1', fr?'Document':'Document'); t('coll-th2', fr?'Essais':'Trials'); t('coll-th3', fr?'Accès Google Drive':'Google Drive access');
+    t('res-collect-title', fr?'Tables de collecte & Scènes (Zenodo)':'Collection tables & Scenes (Zenodo)');
+    t('coll-th1', fr?'Document':'Document'); t('coll-th2', fr?'Essais':'Trials'); t('coll-th3', 'Zenodo');
     t('coll-r1', fr?'ACT — C1 à C4':'ACT — C1 to C4'); t('coll-r1t', fr?'100 essais':'100 trials');
     t('coll-r2', fr?'π₀ — C1 à C4':'π₀ — C1 to C4'); t('coll-r2t', fr?'100 essais':'100 trials');
     t('coll-r3', fr?'SmolVLA — C1 à C4':'SmolVLA — C1 to C4'); t('coll-r3t', fr?'100 essais':'100 trials');
     t('coll-r4', fr?'XVLA — C1 à C4':'XVLA — C1 to C4'); t('coll-r4t', fr?'100 essais':'100 trials');
     t('coll-r5', fr?'ACT — Ablation 3 caméras / C2':'ACT — 3-camera ablation / C2'); t('coll-r5t', fr?'25 essais':'25 trials');
     t('coll-r6', fr?'ACT — Jetson Orin Nano / C2':'ACT — Jetson Orin Nano / C2'); t('coll-r6t', fr?'25 essais':'25 trials');
-    ['wip1','wip2','wip3','wip4','wip5','wip6'].forEach(id => t(id, fr?'En cours':'In progress'));
     t('res-note', fr
-      ? 'Datasets et modèles sur HuggingFace (profil : kagyvro48). Tables de collecte et scènes sur Google Drive (liens à venir).'
-      : 'Datasets and models on HuggingFace (profile: kagyvro48). Collection tables and scenes on Google Drive (links coming soon).');
+      ? 'Datasets et modèles sur HuggingFace (profil : kagyvro48). Tables de collecte et scènes sur Zenodo.'
+      : 'Datasets and models on HuggingFace (profile: kagyvro48). Collection tables and scenes on Zenodo.');
 
     // ── Citation ──
     t('citation-note', fr
