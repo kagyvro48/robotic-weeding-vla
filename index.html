@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Désherbage Robotisé — Évaluation VLA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green: #1a7a4a;
+      --green-pale: #d4edda;
+      --blue: #1a3a6b;
+      --blue-link: #2563eb;
+      --text: #212121;
+      --muted: #666;
+      --border: #e5e7eb;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #fff; color: var(--text); font-size: 16px; line-height: 1.7; }
+
+    /* ══ STICKY NAV ══ */
+    .topnav {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+    }
+    .topnav-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 52px;
+    }
+    .topnav-brand { font-weight: 800; font-size: 13.5px; color: var(--green); white-space: nowrap; }
+    .topnav-links { display: flex; gap: 0; list-style: none; }
+    .topnav-links a {
+      display: block; padding: 6px 13px;
+      font-size: 13px; font-weight: 500; color: var(--muted);
+      text-decoration: none; border-radius: 6px;
+      transition: color .15s, background .15s; white-space: nowrap;
+    }
+    .topnav-links a:hover { color: var(--green); background: #f0faf4; }
+
+    /* Burger */
+    .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; border: none; background: none; border-radius: 6px; }
+    .burger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; }
+    .mobile-menu { display: none; flex-direction: column; background: #fff; border-bottom: 1px solid var(--border); padding: 6px 16px 14px; }
+    .mobile-menu a { display: block; padding: 11px 8px; font-size: 15px; font-weight: 500; color: var(--text); text-decoration: none; border-bottom: 1px solid #f0f0f0; }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--green); }
+    .mobile-menu.open { display: flex; }
+
+    /* ══ PAGE CONTAINER ══ */
+    .page { max-width: 900px; margin: 0 auto; padding: 0 20px 80px; }
+
+    /* ══ HERO ══ */
+    .hero { text-align: center; padding: 54px 0 32px; }
+    .hero h1 {
+      font-size: clamp(21px, 3.4vw, 31px); font-weight: 800;
+      line-height: 1.24; color: #111;
+      max-width: 820px; margin: 0 auto 26px; letter-spacing: -.3px;
+    }
+    .authors { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 8px; margin-bottom: 7px; }
+    .authors a, .authors span.aname { font-size: 15.5px; color: #1a6fc4; text-decoration: none; font-weight: 500; }
+    .authors a:hover { text-decoration: underline; }
+    .authors .sep { color: var(--muted); }
+    sup { font-size: 10px; }
+    .affiliations { font-size: 13.5px; color: var(--muted); margin-bottom: 4px; }
+    .contrib-note { font-size: 12.5px; color: var(--muted); margin-bottom: 26px; }
+
+    /* ══ PILL BUTTONS ══ */
+    .btn-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 12px; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; border-radius: 50px;
+      font-size: 15px; font-weight: 600; text-decoration: none;
+      cursor: pointer; border: none;
+      transition: opacity .18s, transform .18s; white-space: nowrap;
+    }
+    .pill:hover { opacity: .88; transform: translateY(-1px); }
+    .pill-red    { background: #c0392b; color: #fff; }
+    .pill-black  { background: #1a1a1a; color: #fff; }
+    .pill-yellow { background: #f5a623; color: #fff; }
+    .pill-blue   { background: #2980b9; color: #fff; }
+    .pill-yt     { background: #e00; color: #fff; }
+    .pill-gray   { background: #8a9aa8; color: #fff; cursor: not-allowed; }
+    .pill-gray:hover { opacity: .8; transform: none; }
+    .open-source-note { font-size: 14px; color: var(--muted); margin-top: 6px; }
+    .open-source-note strong { font-size: 15.5px; font-family: Georgia, serif; }
+
+    /* ══ BADGE WIP ══ */
+    .badge-wip {
+      display: inline-block; background: #fff3cd; border: 1px solid #f0c955;
+      color: #856404; font-size: 11px; font-weight: 700;
+      padding: 2px 8px; border-radius: 20px; margin-left: 5px; vertical-align: middle;
+    }
+
+    /* ══ MAIN VIDEO ══ */
+    .main-video-wrap {
+      margin: 14px 0 38px; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13); border: 1px solid var(--border);
+    }
+    .main-video-wrap iframe { width: 100%; aspect-ratio: 16/9; display: block; border: none; }
+    .main-video-caption {
+      background: #f8f8f8; border-top: 1px solid var(--border);
+      padding: 12px 18px; font-size: 13.5px; color: var(--muted); text-align: center;
+    }
+    .main-video-caption strong { color: #111; display: block; margin-bottom: 2px; font-size: 14px; }
+
+    /* ══ SECTION ══ */
+    .section { margin-top: 50px; }
+    .section-title { font-size: 25px; font-weight: 800; color: #111; margin-bottom: 14px; letter-spacing: -.2px; }
+    hr.sr { border: none; border-top: 2px solid var(--border); margin-bottom: 20px; }
+
+    /* ══ ABSTRACT ══ */
+    .abstract-text {
+      font-size: 15.5px; line-height: 1.8; color: #333;
+      border-left: 4px solid var(--green); padding-left: 20px; margin-bottom: 16px;
+    }
+    .kw-row { display: flex; flex-wrap: wrap; gap: 7px; }
+    .kw { background: #e8f5ee; border: 1px solid #b2dfcc; color: var(--green); font-size: 12.5px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+
+    /* ══ CONTRIBUTIONS ══ */
+    .contrib-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .contrib-list li { display: flex; gap: 14px; align-items: flex-start; background: #fafffe; border: 1px solid #d4edda; border-radius: 10px; padding: 14px 18px; }
+    .cn { background: var(--green); color: #fff; font-weight: 800; font-size: 13px; min-width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+    /* ══ TABLES ══ */
+    .tbl-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
+    thead th { background: var(--blue); color: #fff; font-weight: 700; padding: 11px 14px; text-align: left; font-size: 13px; }
+    tbody tr:nth-child(even) { background: #f8fbf9; }
+    tbody td { padding: 10px 14px; border-bottom: 1px solid #eff1ef; vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    td.bold { font-weight: 700; color: var(--green); }
+
+    /* ══ HEATMAP ══ */
+    .cell-h { background:#1a7a4a; color:#fff; font-weight:700; text-align:center; border-radius:5px; padding:4px 6px; display:block; }
+    .cell-m { background:#74c89a; color:#0d3d22; font-weight:700; text-align:center; border-radius:5px; padding:4px 6px; display:block; }
+    .cell-l { background:#f4a261; color:#5c2208; font-weight:700; text-align:center; border-radius:5px; padding:4px 6px; display:block; }
+    .cell-v { background:#e63946; color:#fff; font-weight:700; text-align:center; border-radius:5px; padding:4px 6px; display:block; }
+    .hm td:not(:first-child) { text-align:center; padding:8px 10px; }
+    .hm td:first-child { font-weight:700; font-family:'JetBrains Mono',monospace; font-size:13px; }
+
+    /* ══ SCORE CARDS ══ */
+    .score-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 26px; }
+    .sc {
+      background: #fff; border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 18px 12px; text-align: center;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+      transition: transform .18s, box-shadow .18s;
+    }
+    .sc:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.10); }
+    .sc.top { border-color: var(--green); border-width: 2px; }
+    .sc .mn { font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:700; color:var(--blue); margin-bottom:6px; }
+    .sc .pct { font-size: 34px; font-weight: 800; line-height: 1; }
+    .sc .lbl { font-size: 11.5px; color: var(--muted); margin-top:3px; }
+    .sc .rank { display:inline-block; font-size:11px; font-weight:700; padding:2px 10px; border-radius:20px; margin-top:7px; }
+    .r1 { background:#d4edda; color:var(--green); }
+    .r2 { background:#dbeafe; color:#1d4ed8; }
+    .r3 { background:#fff3e0; color:#c25e00; }
+    .r4 { background:#fde8e8; color:#c41d24; }
+
+    /* ══ INFO BOX ══ */
+    .info-box { background: #f0faf4; border: 1px solid #b2dfcc; border-radius: 10px; padding: 16px 20px; font-size: 14.5px; line-height: 1.75; color: #333; margin-top: 16px; }
+    .info-box strong { color: var(--green); }
+
+    /* ══ ABLATION CARDS ══ */
+    .abl-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 20px; }
+    .abl-card { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; padding: 18px 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+    .abl-card.best { border-color: var(--green); }
+    .abl-title { font-weight: 700; font-size: 13.5px; color: var(--blue); margin-bottom: 14px; }
+    .abl-row { display:flex; justify-content:space-between; font-size:13.5px; margin-bottom:7px; }
+    .abl-v { font-weight: 700; }
+
+    /* ══ VIDEO PAIR ══ */
+    .vid-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 20px; }
+    .vid-card { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .vid-card iframe { width:100%; aspect-ratio:16/9; display:block; border:none; }
+    .vid-cap { padding:12px 14px; font-size:13px; color:var(--muted); background:#f8f8f8; border-top:1px solid var(--border); }
+    .vid-cap strong { display:block; color:#111; margin-bottom:2px; font-size:13.5px; }
+
+    /* ══ PLACEHOLDER ══ */
+    .ph { background: #f4f8f4; border: 2px dashed #b2dfcc; border-radius: 10px; padding: 44px 20px; text-align: center; color: var(--muted); font-size: 14px; margin-top: 18px; }
+    .phi { font-size: 32px; margin-bottom: 8px; }
+    .ph-label { font-size: 12px; color: #e67e22; font-weight: 700; display:block; margin-top:6px; }
+
+    /* ══ CODE BOX ══ */
+    .codebox { position: relative; margin-top: 18px; }
+    .codebox pre { background: #1e2330; color: #e2e8f0; border-radius: 10px; padding: 22px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.65; overflow-x: auto; }
+    .copy-btn { position: absolute; top: 10px; right: 12px; padding: 4px 12px; font-size: 12px; border: 1px solid #4a5568; border-radius: 6px; background: #2d3748; color: #e2e8f0; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .copy-btn:hover { background: #3a4a5c; }
+
+    /* ══ RESOURCES GRID ══ */
+    .res-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 12px; margin-top: 18px; }
+    .res-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px 14px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); transition: all .18s; }
+    .res-card:hover { border-color:var(--green); transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,0.10); }
+    .res-card a { text-decoration:none; color:inherit; }
+    .ri { font-size:26px; margin-bottom:7px; }
+    .rt { font-weight:700; font-size:13.5px; color:var(--blue); }
+    .rs { font-size:12px; color:var(--muted); margin-top:3px; }
+
+    /* ══ FOOTER ══ */
+    footer { border-top: 1px solid var(--border); margin-top: 60px; padding: 28px 20px; text-align: center; font-size: 13px; color: var(--muted); }
+    footer a { color: var(--green); text-decoration: none; }
+
+    /* ══ MISC ══ */
+    .note { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 8px; line-height:1.6; }
+    .read-more-btn {
+      background: none; border: none; color: var(--green); font-weight: 600;
+      font-size: 14px; cursor: pointer; padding: 0; margin-left: 4px;
+      font-family: 'Inter', sans-serif; text-decoration: underline;
+    }
+    .read-more-btn:hover { opacity: .75; }
+    .cond-c1 td:first-child { border-left: 4px solid #74c89a; }
+    .cond-c2 td:first-child { border-left: 4px solid #f4a261; }
+    .cond-c3 td:first-child { border-left: 4px solid #e76f51; }
+    .cond-c4 td:first-child { border-left: 4px solid #e63946; }
+
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 700px) {
+      .topnav-links { display: none; }
+      .burger { display: flex; }
+      .score-grid { grid-template-columns: 1fr 1fr; }
+      .abl-grid { grid-template-columns: 1fr; }
+      .vid-pair { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 21px; }
+      .pill { font-size: 13.5px; padding: 9px 16px; }
+      .res-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (min-width: 701px) {
+      .burger { display: none; }
+      .mobile-menu { display: none !important; }
+    }
+    /* ══ FIGURES ══ */
+    .fig-wrap {
+      margin-top: 22px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .fig-wrap > img { border-radius: 12px 12px 0 0; }
+    .fig-caption {
+      padding: 12px 18px;
+      font-size: 13.5px;
+      color: #444;
+      background: #f8f8f8;
+      border-top: 1px solid var(--border);
+      margin: 0;
+      text-align: center;
+      line-height: 1.6;
+    }
+    .fig2-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .fig2-cell { display: flex; flex-direction: column; }
+    .fig2-cell:first-child { border-right: 1px solid var(--border); }
+    .fig2-cell img { border-radius: 0; }
+    .fig-subcap {
+      padding: 9px 14px;
+      font-size: 12.5px;
+      color: var(--muted);
+      background: #f8f8f8;
+      border-top: 1px solid var(--border);
+      margin: 0;
+      text-align: center;
+      line-height: 1.5;
+      flex: 1;
+    }
+    @media (max-width: 600px) {
+      .fig2-grid { grid-template-columns: 1fr; }
+      .fig2-cell:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ STICKY TOP NAV ══ -->
+<nav class="topnav" id="topnav">
+  <div class="topnav-inner">
+    <span class="topnav-brand" id="brandText">🌿 Désherbage Robotisé — UQAR 2026</span>
+    <ul class="topnav-links">
+      <li><a href="#abstract" data-fr="Résumé" data-en="Abstract">Résumé</a></li>
+      <li><a href="#videos" data-fr="Vidéos" data-en="Videos">Vidéos</a></li>
+      <li><a href="#resultats" data-fr="Résultats" data-en="Results">Résultats</a></li>
+      <li><a href="#ablation" data-fr="Ablation" data-en="Ablation">Ablation</a></li>
+      <li><a href="#ressources" data-fr="Ressources" data-en="Resources">Ressources</a></li>
+      <li><a href="#citation" data-fr="Citation" data-en="Citation">Citation</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button id="langBtn" onclick="toggleLang()" style="background:#1a3a6b;color:#fff;border:none;border-radius:20px;padding:5px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .18s;">FR / EN</button>
+      <button class="burger" id="burgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#abstract" data-fr="Résumé" data-en="Abstract">Résumé</a>
+  <a href="#videos" data-fr="Vidéos" data-en="Videos">Vidéos</a>
+  <a href="#resultats" data-fr="Résultats" data-en="Results">Résultats</a>
+  <a href="#ablation" data-fr="Ablation" data-en="Ablation">Ablation</a>
+  <a href="#ressources" data-fr="Ressources" data-en="Resources">Ressources</a>
+  <a href="#citation" data-fr="Citation" data-en="Citation">Citation</a>
+</div>
+
+<!-- ══ PAGE ══ -->
+<div class="page">
+
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+    <h1 id="heroTitle">Évaluation expérimentale comparative de politiques d'apprentissage par démonstration pour le désherbage robotisé par arrachage mécanique en environnement contrôlé</h1>
+
+    <div class="authors">
+      <span class="aname">Yve-Roland Kagambega<sup>1★</sup></span>
+      <span class="sep">&nbsp;&nbsp;</span>
+      <a href="https://scholar.google.com/citations?user=so_Apl4AAAAJ&hl=en" target="_blank">Mehdi Adda<sup>1†</sup></a>
+    </div>
+    <p class="affiliations"><sup>1</sup>Université du Québec à Rimouski (UQAR), Canada</p>
+    <p class="contrib-note" id="contribNote"><sup>★</sup> Auteur principal &nbsp;·&nbsp; <sup>†</sup> Superviseur — <a href="https://scholar.google.com/citations?user=so_Apl4AAAAJ&hl=en" target="_blank" style="color:#1a6fc4;">Google Scholar</a></p>
+
+    <!-- Pill buttons -->
+    <div class="btn-row">
+      <span class="pill pill-red" style="opacity:.65;cursor:not-allowed;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg>
+        <span data-fr="Paper" data-en="Paper">Paper</span> <span class="badge-wip" data-fr="En cours" data-en="In progress">En cours</span>
+      </span>
+      <span class="pill pill-black" style="opacity:.65;cursor:not-allowed;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.09-.744.083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        <span data-fr="Code" data-en="Code">Code</span> <span class="badge-wip" data-fr="Bientôt" data-en="Soon">Bientôt</span>
+      </span>
+      <a class="pill pill-yellow" href="https://huggingface.co/kagyvro48" target="_blank">
+        🤗 <span data-fr="Modèles" data-en="Models">Modèles</span>
+      </a>
+      <a class="pill pill-blue" href="https://huggingface.co/kagyvro48" target="_blank">
+        🤗 <span data-fr="Datasets" data-en="Datasets">Datasets</span>
+      </a>
+      <a class="pill pill-yt" href="https://www.youtube.com/watch?v=1opNIYN-u64&t=68s" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        <span data-fr="Vidéo compilation" data-en="Video compilation">Vidéo compilation</span>
+      </a>
+    </div>
+    <p class="open-source-note" id="openSourceNote">Modèles, Datasets et Résultats en <strong>Open Source</strong>. Explorez-les !</p>
+  </section>
+
+  <!-- ══ MAIN VIDEO (grande, centrée) ══ -->
+  <div class="main-video-wrap" id="videos">
+    <iframe
+      src="https://www.youtube.com/embed/1opNIYN-u64?start=68"
+      title="Compilation 4 modèles — ACT, π₀, SmolVLA, XVLA"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+    <div class="main-video-caption">
+      <strong id="mainVidTitle">Compilation des 4 politiques évaluées — ACT, π₀, SmolVLA, XVLA</strong>
+      <span id="mainVidSub">Bras robotique SO-101 · 400 épisodes de téléopération · Conditions C1–C4 · Laboratoire UQAR Lévis, salle 2063</span>
+    </div>
+  </div>
+
+  <!-- ══ VIDÉOS SECONDAIRES ══ -->
+  <section class="section">
+    <h2 class="section-title" id="sec-other-videos">Autres vidéos de démonstration</h2>
+    <hr class="sr">
+    <div class="vid-pair">
+      <div class="vid-card">
+        <iframe src="https://www.youtube.com/embed/SFmImPtIqIg?start=9" title="Ablation 3 caméras" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="vid-cap">
+          <strong id="vid2Title">Ablation — Configuration 3 caméras</strong>
+          <span id="vid2Sub">Impact de l'ajout d'une vue top-down sur ACT en C2. Dégradation : 80 % → 60 %.</span>
+        </div>
+      </div>
+      <div class="vid-card">
+        <iframe src="https://www.youtube.com/embed/XyL-9byca-U" title="Jetson Orin Nano embarqué" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="vid-cap">
+          <strong id="vid3Title">Déploiement embarqué — Jetson Orin Nano 8 GB</strong>
+          <span id="vid3Sub">Politique ACT à 30 Hz · Latence ~20 s/cycle · Succès C2 : 72 % (18/25).</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ABSTRACT ══ -->
+  <section class="section" id="abstract">
+    <h2 class="section-title" id="sec-abstract-title">Résumé</h2>
+    <hr class="sr">
+
+    <!-- FR abstract -->
+    <div id="abstract-fr">
+      <p class="abstract-text">
+        Ce travail présente une évaluation expérimentale comparative de quatre politiques d'apprentissage par démonstration appliquées à une tâche d'arrachage robotisé d'adventices en environnement contrôlé : une politique visuomotrice (<strong>ACT</strong>) et trois modèles Vision-Langage-Action (<strong>π₀, SmolVLA, XVLA</strong>). Un jeu de données de <strong>400 épisodes</strong> a été collecté par téléopération sur un bras SO-101 à six degrés de liberté, avec des adventices et distracteurs imprimés en 3D. Quatre conditions de difficulté croissante ont été définies (C1–C4). Chaque modèle a été évalué sur <strong>100 essais</strong> (25 par condition) selon un critère de succès strict. <span id="abstract-fr-more" style="display:none;"> <strong>ACT obtient le taux de succès global le plus élevé (78 %)</strong>, suivi de π₀ (60 %), SmolVLA (39 %) et XVLA (37 %). Une étude d'ablation montre que l'ajout d'une caméra top-down dégrade les performances de 20 points. Le déploiement sur <strong>Jetson Orin Nano 8 Go</strong> préserve un taux de succès de 72 %, au prix d'une latence multipliée par 2,5. Ces résultats montrent qu'une politique visuomotrice légère reste compétitive face aux architectures VLA en régime de données limité.</span><button class="read-more-btn" onclick="toggleAbstract('fr')" id="rmBtn-fr">… Voir plus</button>
+      </p>
+      <div class="kw-row">
+        <span class="kw">Apprentissage par démonstration</span>
+        <span class="kw">Désherbage robotisé</span>
+        <span class="kw">ACT</span>
+        <span class="kw">Vision-Language-Action</span>
+        <span class="kw">π₀ · SmolVLA · XVLA</span>
+        <span class="kw">Déploiement embarqué</span>
+        <span class="kw">Arrachage mécanique</span>
+        <span class="kw">Environnement contrôlé</span>
+      </div>
+    </div>
+
+    <!-- EN abstract (hidden by default) -->
+    <div id="abstract-en" style="display:none;">
+      <p class="abstract-text">
+        This work presents a comparative experimental evaluation of four imitation learning policies applied to a robotic mechanical weed-pulling task in a controlled environment: one visuomotor policy (<strong>ACT</strong>) and three Vision-Language-Action models (<strong>π₀, SmolVLA, XVLA</strong>). A dataset of <strong>400 episodes</strong> was collected via teleoperation on a 6-DOF SO-101 robot arm, using 3D-printed weeds and distractors. Four conditions of increasing difficulty were defined (C1–C4). Each model was evaluated over <strong>100 trials</strong> (25 per condition) under a strict success criterion. <span id="abstract-en-more" style="display:none;"><strong>ACT achieves the highest overall success rate (78 %)</strong>, followed by π₀ (60 %), SmolVLA (39 %) and XVLA (37 %). An ablation study shows that adding a top-down camera degrades performance by 20 percentage points. Deployment on a <strong>Jetson Orin Nano 8 GB</strong> maintains a 72 % success rate at the cost of 2.5× higher latency. These results indicate that a lightweight visuomotor policy remains competitive against VLA architectures under limited demonstration data.</span><button class="read-more-btn" onclick="toggleAbstract('en')" id="rmBtn-en">… Read more</button>
+      </p>
+      <div class="kw-row">
+        <span class="kw">Imitation learning</span>
+        <span class="kw">Robotic weeding</span>
+        <span class="kw">ACT</span>
+        <span class="kw">Vision-Language-Action</span>
+        <span class="kw">π₀ · SmolVLA · XVLA</span>
+        <span class="kw">Embedded deployment</span>
+        <span class="kw">Mechanical weed pulling</span>
+        <span class="kw">Controlled environment</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CONTRIBUTIONS ══ -->
+  <section class="section">
+    <h2 class="section-title" id="sec-contributions">Contributions principales</h2>
+    <hr class="sr">
+    <ul class="contrib-list">
+      <li><div class="cn">C1</div><div id="contrib1"><strong>Protocole reproductible</strong> — 400 épisodes de démonstration, 4 conditions expérimentales (C1–C4), critère de succès formellement défini (saisie → arrachage → dépose → retour, ≤ 60 s). Données, modèles et résultats publiquement disponibles.</div></li>
+      <li><div class="cn">C2</div><div id="contrib2"><strong>Comparaison systématique</strong> — Évaluation de 4 politiques (ACT vs π₀, SmolVLA, XVLA) sur 400 essais contrôlés (25 essais × 4 conditions × 4 modèles).</div></li>
+      <li><div class="cn">C3</div><div id="contrib3"><strong>Ablation configuration visuelle</strong> — Quantification de l'impact de l'ajout d'une vue top-down sur ACT (2 vs 3 caméras, −20 points de pourcentage en C2).</div></li>
+      <li><div class="cn">C4</div><div id="contrib4"><strong>Évaluation embarquée</strong> — Déploiement d'ACT sur NVIDIA Jetson Orin Nano 8 Go : taux de succès 72 %, latence ~20 s/cycle (×2,5 vs Desktop GPU), délai de démarrage 30 s.</div></li>
+    </ul>
+  </section>
+
+  <!-- ══ DISPOSITIF ══ -->
+  <section class="section">
+    <h2 class="section-title" id="sec-setup">Dispositif expérimental</h2>
+    <hr class="sr">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th id="setup-th1">Élément</th><th id="setup-th2">Détail</th><th id="setup-th3">Valeur</th></tr></thead>
+        <tbody>
+          <tr><td class="bold" id="setup-r1a">Robot</td><td id="setup-r1b">SO-101 follower + leader (téléopération)</td><td>6 DDL</td></tr>
+          <tr><td class="bold" id="setup-r2a">Herbes &amp; distracteurs</td><td id="setup-r2b">Répliques imprimées en 3D (environnement contrôlé)</td><td>3D-printed</td></tr>
+          <tr><td class="bold" id="setup-r3a">Dataset</td><td id="setup-r3b">Épisodes d'entraînement valides collectés par téléopération</td><td id="setup-r3c">400 épisodes</td></tr>
+          <tr><td class="bold" id="setup-r4a">Caméras</td><td id="setup-r4b">Eye-in-hand + Front (config. principale) · Top-down (ablation)</td><td>30 FPS</td></tr>
+          <tr><td class="bold" id="setup-r5a">Plan d'expérience</td><td id="setup-r5b">4 modèles × 4 conditions × 25 essais + ablation + Jetson</td><td id="setup-r5c">450 tests</td></tr>
+          <tr><td class="bold" id="setup-r6a">Plateformes</td><td id="setup-r6b">Desktop GPU · Serveur A100 UQAR (π₀) · Jetson Orin Nano 8 GB</td><td>30 Hz</td></tr>
+          <tr><td class="bold" id="setup-r7a">Budget temporel</td><td id="setup-r7b">Durée maximale par essai</td><td id="setup-r7c">60 secondes</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Figure 1 — Workflow -->
+    <div class="fig-wrap" id="fig1-wrap">
+      <img
+        src="assets/figure1_workflow_ENG.svg"
+        id="fig1-img"
+        alt="Figure 1 — Schéma synoptique du workflow expérimental"
+        style="width:100%; border-radius:8px; display:block;"
+        onerror="this.style.display='none'; document.getElementById('fig1-ph').style.display='flex';"
+      >
+      <!-- Placeholder shown if image not yet uploaded -->
+      <div class="ph" id="fig1-ph" style="display:none; margin-top:0;">
+        <div class="phi">📊</div>
+        <strong id="fig1-ph-title">Figure 1 — Schéma synoptique du workflow expérimental</strong><br>
+        <span class="ph-label" id="fig1-ph-lbl">Fichier : assets/figure1_workflow_ENG.svg — À déposer sur GitHub</span>
+      </div>
+      <p class="fig-caption" id="fig1-caption">
+        <strong>Figure 1</strong> — <span id="fig1-caption-text">Schéma synoptique du workflow expérimental.</span>
+      </p>
+    </div>
+
+    <!-- Figure 2 — Setup photos (side by side) -->
+    <div class="fig-wrap" id="fig2-wrap" style="margin-top:28px;">
+      <div class="fig2-grid">
+        <!-- Fig 2a -->
+        <div class="fig2-cell">
+          <img
+            src="assets/figure2a_setup_workstation.png"
+            id="fig2a-img"
+            alt="(a) Wide view of the control workstation and SO-101 leader arm."
+            style="width:100%; border-radius:8px; display:block;"
+            onerror="this.style.display='none'; document.getElementById('fig2a-ph').style.display='flex';"
+          >
+          <div class="ph" id="fig2a-ph" style="display:none; margin-top:0; padding:30px 12px;">
+            <div class="phi" style="font-size:22px;">📷</div>
+            <span style="font-size:13px;" id="fig2a-ph-lbl">assets/figure2a_setup_workstation.png</span>
+            <span class="ph-label">À déposer sur GitHub</span>
+          </div>
+          <p class="fig-subcap" id="fig2a-cap">(<em>a</em>) <span id="fig2a-cap-text">Wide view of the control workstation and SO-101 leader arm.</span></p>
+        </div>
+        <!-- Fig 2b -->
+        <div class="fig2-cell">
+          <img
+            src="assets/figure2b_setup_workspace.png"
+            id="fig2b-img"
+            alt="(b) Close-up of the workspace (black tiles), SO-101 follower arm and cameras."
+            style="width:100%; border-radius:8px; display:block;"
+            onerror="this.style.display='none'; document.getElementById('fig2b-ph').style.display='flex';"
+          >
+          <div class="ph" id="fig2b-ph" style="display:none; margin-top:0; padding:30px 12px;">
+            <div class="phi" style="font-size:22px;">📷</div>
+            <span style="font-size:13px;" id="fig2b-ph-lbl">assets/figure2b_setup_workspace.png</span>
+            <span class="ph-label">À déposer sur GitHub</span>
+          </div>
+          <p class="fig-subcap" id="fig2b-cap">(<em>b</em>) <span id="fig2b-cap-text">Close-up of the workspace (black tiles), SO-101 follower arm and cameras.</span></p>
+        </div>
+      </div>
+      <p class="fig-caption" id="fig2-caption">
+        <strong>Figure 2</strong> — <span id="fig2-caption-text">Experimental setup used for teleoperated data collection and evaluation: (<em>a</em>) control workstation and SO-101 leader arm; (<em>b</em>) workspace with black modular tiles, 3D-printed targets/distractors, SO-101 follower arm and cameras.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ══ CONDITIONS ══ -->
+  <section class="section">
+    <h2 class="section-title" id="sec-conditions">Conditions expérimentales</h2>
+    <hr class="sr">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th id="cond-th1">Code</th><th id="cond-th2">Intitulé</th><th id="cond-th3">Description</th><th id="cond-th4">Difficulté</th></tr></thead>
+        <tbody>
+          <tr class="cond-c1"><td><strong>C1</strong></td><td id="cond-c1-name">Herbe seule</td><td id="cond-c1-desc">Une seule herbe cible, positions variées, aucun distracteur</td><td id="cond-c1-diff">🟢 Faible</td></tr>
+          <tr class="cond-c2"><td><strong>C2</strong></td><td id="cond-c2-name">Herbe + Distracteurs</td><td id="cond-c2-desc">Une herbe cible + distracteurs, positions variées</td><td id="cond-c2-diff">🟡 Modérée</td></tr>
+          <tr class="cond-c3"><td><strong>C3</strong></td><td id="cond-c3-name">Plusieurs herbes ± distracteurs</td><td id="cond-c3-desc">Plusieurs herbes présentes, une seule cible désignée</td><td id="cond-c3-diff">🟠 Élevée</td></tr>
+          <tr class="cond-c4"><td><strong>C4*</strong></td><td id="cond-c4-name">Herbes couchées et/ou distracteurs seuls</td><td id="cond-c4-desc">Herbes couchées (orientation inédite) et/ou uniquement des distracteurs. Le démonstrateur restait immobile — comportement appris depuis les démonstrations.</td><td id="cond-c4-diff">🔴 Difficile</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ RÉSULTATS ══ -->
+  <section class="section" id="resultats">
+    <h2 class="section-title" id="sec-results">Résultats</h2>
+    <hr class="sr">
+
+    <div class="score-grid">
+      <div class="sc top">
+        <div class="mn">ACT</div>
+        <div class="pct" style="color:#1a7a4a">78%</div>
+        <div class="lbl">78 / 100 essais</div>
+        <span class="rank r1">🥇 1er</span>
+      </div>
+      <div class="sc">
+        <div class="mn">π₀</div>
+        <div class="pct" style="color:#2563eb">60%</div>
+        <div class="lbl">60 / 100 essais</div>
+        <span class="rank r2">2ème</span>
+      </div>
+      <div class="sc">
+        <div class="mn">SmolVLA</div>
+        <div class="pct" style="color:#c25e00">39%</div>
+        <div class="lbl">39 / 100 essais</div>
+        <span class="rank r3">3ème</span>
+      </div>
+      <div class="sc">
+        <div class="mn">XVLA</div>
+        <div class="pct" style="color:#c41d24">37%</div>
+        <div class="lbl">37 / 100 essais</div>
+        <span class="rank r4">4ème</span>
+      </div>
+    </div>
+
+    <h3 id="results-label" style="font-size:15.5px; font-weight:700; margin-bottom:6px;">Taux de succès par modèle et condition (n / 25 essais)</h3>
+    <p class="note" id="hm-note">* C4 : comportement immobile appris. SmolVLA / ACT / π₀ : robot immobile = codé succès. XVLA : tente d'agir mais cible les distracteurs ronds.</p>
+
+    <div class="tbl-wrap" style="margin-top:12px;">
+      <table class="hm">
+        <thead>
+          <tr><th id="hm-th0">Modèle</th><th id="hm-th1">C1 — Herbe seule</th><th id="hm-th2">C2 — + Distracteurs</th><th id="hm-th3">C3 — Plusieurs herbes</th><th id="hm-th4">C4* — Herbes couchées</th><th id="hm-th5">Global / 100</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ACT</td>
+            <td><span class="cell-h">23/25 · 92%</span></td>
+            <td><span class="cell-h">20/25 · 80%</span></td>
+            <td><span class="cell-m">14/25 · 56%</span></td>
+            <td><span class="cell-h">21/25 · 84%</span></td>
+            <td style="font-weight:800; color:#1a7a4a;">78 / 100 · 78%</td>
+          </tr>
+          <tr>
+            <td>π₀</td>
+            <td><span class="cell-m">18/25 · 72%</span></td>
+            <td><span class="cell-h">21/25 · 84%</span></td>
+            <td><span class="cell-v">2/25 · 8%</span></td>
+            <td><span class="cell-m">19/25 · 76%</span></td>
+            <td style="font-weight:800; color:#2563eb;">60 / 100 · 60%</td>
+          </tr>
+          <tr>
+            <td>SmolVLA</td>
+            <td><span class="cell-l">10/25 · 40%</span></td>
+            <td><span class="cell-l">6/25 · 24%</span></td>
+            <td><span class="cell-v">1/25 · 4%</span></td>
+            <td><span class="cell-h">22/25 · 88%</span></td>
+            <td style="font-weight:800; color:#c25e00;">39 / 100 · 39%</td>
+          </tr>
+          <tr>
+            <td>XVLA</td>
+            <td><span class="cell-m">15/25 · 60%</span></td>
+            <td><span class="cell-l">8/25 · 32%</span></td>
+            <td><span class="cell-l">10/25 · 40%</span></td>
+            <td><span class="cell-v">4/25 · 16%</span></td>
+            <td style="font-weight:800; color:#c41d24;">37 / 100 · 37%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ph" style="margin-top:18px;">
+      <div class="phi">📊</div>
+      <strong id="results-fig-title">Figure — Dégradation des performances selon la complexité (C1 → C4)</strong>
+      <span class="ph-label">Image à compléter — en cours</span>
+    </div>
+
+    <div class="info-box" id="results-analysis">
+      <strong id="results-analysis-title">Analyse par condition :</strong> <span id="results-analysis-body">En <strong>C1</strong>, ACT atteint 92 % (23/25). En <strong>C2</strong>, π₀ se distingue avec 84 % (21/25), surpassant ACT. En <strong>C3</strong>, seul ACT maintient un taux acceptable (56 % — 14/25), tandis que π₀ s'effondre à 8 % (2/25) et SmolVLA à 4 % (1/25). En <strong>C4</strong>, sans cette condition le classement XVLA (44 %) dépasse SmolVLA (22,7 %).</span>
+    </div>
+  </section>
+
+  <!-- ══ ABLATION ══ -->
+  <section class="section" id="ablation">
+    <h2 class="section-title" id="sec-ablation-title">Ablation caméras &amp; Déploiement embarqué</h2>
+    <hr class="sr">
+    <p id="ablation-intro" style="font-size:15px; color:var(--muted); margin-bottom:6px;">Trois configurations comparées sur la condition C2 (25 essais chacune).</p>
+    <div class="abl-grid">
+      <div class="abl-card best">
+        <div class="abl-title" id="abl1-title">🖥️ ACT — 2 caméras &nbsp;<span id="abl-ref-badge" style="background:#d4edda;color:var(--green);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;">Référence</span></div>
+        <div class="abl-row"><span id="abl-platform-lbl">Plateforme</span><span class="abl-v">Desktop GPU 4GB</span></div>
+        <div class="abl-row"><span id="abl-cam-lbl">Caméras</span><span class="abl-v">Eye + Front</span></div>
+        <div class="abl-row"><span id="abl-success-lbl">Succès C2</span><span class="abl-v" style="color:#1a7a4a">20/25 · 80 %</span></div>
+        <div class="abl-row"><span id="abl-latency-lbl">Latence moy.</span><span class="abl-v">~8 s</span></div>
+        <div class="abl-row"><span id="abl-start-lbl">Démarrage</span><span class="abl-v" id="abl1-start">Immédiat</span></div>
+      </div>
+      <div class="abl-card">
+        <div class="abl-title" id="abl2-title">📷 ACT — 3 caméras</div>
+        <div class="abl-row"><span>Plateforme</span><span class="abl-v">Desktop GPU 4GB</span></div>
+        <div class="abl-row"><span>Caméras</span><span class="abl-v">Eye + Front + Top</span></div>
+        <div class="abl-row"><span>Succès C2</span><span class="abl-v" style="color:#c25e00">15/25 · 60 %</span></div>
+        <div class="abl-row"><span>Latence moy.</span><span class="abl-v">~9 s</span></div>
+        <div class="abl-row"><span>Démarrage</span><span class="abl-v" id="abl2-start">Immédiat</span></div>
+      </div>
+      <div class="abl-card">
+        <div class="abl-title" id="abl3-title">🔌 ACT — Jetson Orin Nano</div>
+        <div class="abl-row"><span>Plateforme</span><span class="abl-v">Jetson Orin Nano 8GB</span></div>
+        <div class="abl-row"><span>Caméras</span><span class="abl-v">Eye + Front</span></div>
+        <div class="abl-row"><span>Succès C2</span><span class="abl-v" style="color:#2563eb">18/25 · 72 %</span></div>
+        <div class="abl-row"><span>Latence moy.</span><span class="abl-v">~20 s (×2,5)</span></div>
+        <div class="abl-row"><span>Démarrage</span><span class="abl-v" id="abl3-start">+30 s warm-up</span></div>
+      </div>
+    </div>
+    <div class="info-box">
+      <strong id="abl-key-title">Résultats clés :</strong> <span id="abl-key-body">L'ajout de la caméra top-down dégrade les performances de <strong>20 points</strong> (80 % → 60 %), indiquant que la vue supplémentaire constitue un bruit plutôt qu'un apport informationnel. Sur Jetson Orin Nano, ACT conserve 72 % de succès avec une latence 2,5× supérieure. Un déploiement terrain reste envisageable.</span>
+    </div>
+  </section>
+
+  <!-- ══ MODÈLES ══ -->
+  <section class="section">
+    <h2 class="section-title" id="sec-models">Modèles entraînés</h2>
+    <hr class="sr">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th id="mod-th1">Modèle</th><th id="mod-th2">Type</th><th>Steps</th><th>Batch</th><th id="mod-th5">Durée</th><th>HuggingFace</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ACT</strong> (2 cams)</td><td id="mod-r1t">Visuomoteur BC + chunking</td><td>100 000</td><td>8</td><td>2h 07 min</td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green);font-weight:600;" id="hf-see">🤗 Voir</a></td></tr>
+          <tr><td><strong>ACT</strong> (3 cams — ablation)</td><td>Visuomoteur BC + chunking</td><td>100 000</td><td>8</td><td>4h 28 min</td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
+          <tr><td><strong>π₀</strong></td><td id="mod-r3t">VLA Flow matching (PaliGemma)</td><td id="mod-r3s">15 000 retenus*</td><td>32</td><td>1j 15h 14 min</td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
+          <tr><td><strong>SmolVLA</strong></td><td id="mod-r4t">VLA compact Flow matching**</td><td>15 000</td><td>32</td><td>2h 50 min</td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
+          <tr><td><strong>XVLA</strong></td><td id="mod-r5t">VLA Soft prompts inter-embodiment**</td><td>15 000</td><td>32</td><td>2h 50 min</td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green);font-weight:600;">🤗 Voir</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" id="mod-note1">* π₀ : 30 000 steps entraînés, checkpoint à 15 000 retenu (meilleure validation). lr = 2,5e-5, weight_decay = 0,01, dtype = bfloat16.</p>
+    <p class="note" id="mod-note2">** SmolVLA &amp; XVLA : freeze_vision_encoder = true, freeze_language_encoder = true, train_policy_transformer = true, action_mode = auto.</p>
+  </section>
+
+  <!-- ══ RESSOURCES ══ -->
+  <section class="section" id="ressources">
+    <h2 class="section-title" id="sec-resources">Ressources &amp; Données</h2>
+    <hr class="sr">
+
+    <h3 id="res-train-title" style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px;">Datasets d'entraînement (HuggingFace)</h3>
+    <div class="res-grid" style="grid-template-columns:1fr 1fr;">
+      <div class="res-card"><a href="https://huggingface.co/datasets/kagyvro48/arracher_une_mauvaise_herbe_400_front_eye" target="_blank"><div class="ri">🤗</div><div class="rt" id="ds1-title">2 caméras — principal</div><div class="rs" id="ds1-sub">Front + Eye-in-hand · 400 épisodes</div></a></div>
+      <div class="res-card"><a href="https://huggingface.co/datasets/kagyvro48/arracher_une_mauvaise_herbe_400" target="_blank"><div class="ri">🤗</div><div class="rt" id="ds2-title">3 caméras — ablation</div><div class="rs" id="ds2-sub">Front + Eye + Top-down · 400 épisodes</div></a></div>
+    </div>
+
+    <h3 id="res-eval-title" style="font-size:15px;font-weight:700;color:var(--blue);margin-top:26px;margin-bottom:12px;">Datasets d'évaluation (HuggingFace)</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th id="eval-th1">Modèle</th><th>C1</th><th>C2</th><th>C3</th><th>C4*</th><th>Ablation</th><th>Jetson</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ACT</strong></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td></tr>
+          <tr><td><strong>π₀</strong></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td></tr>
+          <tr><td><strong>SmolVLA</strong></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td></tr>
+          <tr><td><strong>XVLA</strong></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td><a href="https://huggingface.co/kagyvro48" target="_blank" style="color:var(--green)">🔗</a></td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="res-collect-title" style="font-size:15px;font-weight:700;color:var(--blue);margin-top:26px;margin-bottom:12px;">Tables de collecte &amp; Scènes <span class="badge-wip" data-fr="Liens en cours" data-en="Links coming soon">Liens en cours</span></h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th id="coll-th1">Document</th><th id="coll-th2">Essais</th><th id="coll-th3">Accès Google Drive</th></tr></thead>
+        <tbody>
+          <tr><td id="coll-r1">ACT — C1 à C4</td><td id="coll-r1t">100 essais</td><td><em id="wip1" style="color:var(--muted)">En cours</em></td></tr>
+          <tr><td id="coll-r2">π₀ — C1 à C4</td><td id="coll-r2t">100 essais</td><td><em id="wip2" style="color:var(--muted)">En cours</em></td></tr>
+          <tr><td id="coll-r3">SmolVLA — C1 à C4</td><td id="coll-r3t">100 essais</td><td><em id="wip3" style="color:var(--muted)">En cours</em></td></tr>
+          <tr><td id="coll-r4">XVLA — C1 à C4</td><td id="coll-r4t">100 essais</td><td><em id="wip4" style="color:var(--muted)">En cours</em></td></tr>
+          <tr><td id="coll-r5">ACT — Ablation 3 caméras / C2</td><td id="coll-r5t">25 essais</td><td><em id="wip5" style="color:var(--muted)">En cours</em></td></tr>
+          <tr><td id="coll-r6">ACT — Jetson Orin Nano / C2</td><td id="coll-r6t">25 essais</td><td><em id="wip6" style="color:var(--muted)">En cours</em></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" id="res-note">Datasets et modèles sur HuggingFace (profil : kagyvro48). Tables de collecte et scènes sur Google Drive (liens à venir).</p>
+  </section>
+
+  <!-- ══ CITATION ══ -->
+  <section class="section" id="citation">
+    <h2 class="section-title" id="sec-citation-title">Citation <span class="badge-wip" data-fr="En cours" data-en="In progress">En cours</span></h2>
+    <hr class="sr">
+    <p id="citation-note" style="font-size:15px;color:var(--muted);margin-bottom:14px;">Article en cours de rédaction pour soumission (cible : revue Q1/Q2, ex. <em>Computers and Electronics in Agriculture</em>).</p>
+    <div class="codebox">
+      <button class="copy-btn" id="copyBtn">Copier</button>
+      <pre id="citeBlock">@article{kagambega2026weeding,
+  title     = {\'Evaluation exp\'erimentale comparative de politiques
+               d'apprentissage par d\'emonstration pour le d\'esherbage
+               robotis\'e par arrachage m\'ecanique en environnement
+               contr\^ol\'e},
+  author    = {Kagambega, Yve-Roland and Adda, Mehdi},
+  journal   = {En cours de soumission},
+  institution = {Universit\'e du Qu\'ebec \`a Rimouski (UQAR), Canada},
+  year      = {2026}
+}</pre>
+    </div>
+  </section>
+
+  <!-- ══ REMERCIEMENTS ══ -->
+  <section class="section">
+    <h2 class="section-title" id="sec-ack">Remerciements</h2>
+    <hr class="sr">
+    <p id="ack-text" style="font-size:15px;line-height:1.8;color:#444;">
+      Ce travail a été réalisé au laboratoire de robotique de l'<strong>Université du Québec à Rimouski (UQAR)</strong>, Campus de Lévis, salle 2063. Nous remercions l'équipe de l'UQAR pour l'accès aux équipements et au serveur A100, ainsi que les contributeurs du projet <a href="https://github.com/huggingface/lerobot" target="_blank" style="color:var(--blue-link)">LeRobot (Hugging Face)</a> pour les outils open-source. La conception de cette page s'est inspirée du projet <a href="https://xvla-tech.github.io/" target="_blank" style="color:var(--blue-link)">X-VLA</a>.
+    </p>
+  </section>
+
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <p>
+    <strong>Yve-Roland Kagambega</strong> &amp;
+    <a href="https://scholar.google.com/citations?user=so_Apl4AAAAJ&hl=en">Mehdi Adda</a>
+    · Université du Québec à Rimouski (UQAR), Canada · 2026
+  </p>
+  <p style="margin-top:8px;">
+    <a href="https://huggingface.co/kagyvro48">🤗 HuggingFace</a> &nbsp;·&nbsp;
+    <a href="https://www.youtube.com/watch?v=1opNIYN-u64&t=68s">▶ YouTube</a> &nbsp;·&nbsp;
+    <a href="https://kagyvro48.github.io/robotic-weeding-vla/">🌐 Page du projet</a>
+  </p>
+</footer>
+
+<script>
+  // ══ Current language (default EN) ══
+  let currentLang = 'en';
+
+  // ══ All translatable content ══
+  const translations = {
+    // Nav
+    'nav-abstract':   { fr: 'Résumé',     en: 'Abstract' },
+    'nav-videos':     { fr: 'Vidéos',     en: 'Videos' },
+    'nav-results':    { fr: 'Résultats',  en: 'Results' },
+    'nav-ablation':   { fr: 'Ablation',   en: 'Ablation' },
+    'nav-resources':  { fr: 'Ressources', en: 'Resources' },
+    'nav-citation':   { fr: 'Citation',   en: 'Citation' },
+    // Brand
+    'brand': { fr: '🌿 Désherbage Robotisé — UQAR 2026', en: '🌿 Robotic Weeding — UQAR 2026' },
+    // Author notes
+    'contrib-note': {
+      fr: '<sup>★</sup> Auteur principal &nbsp;·&nbsp; <sup>†</sup> Superviseur — <a href="https://scholar.google.com/citations?user=so_Apl4AAAAJ&hl=en" target="_blank" style="color:#1a6fc4;">Google Scholar</a>',
+      en: '<sup>★</sup> Lead author &nbsp;·&nbsp; <sup>†</sup> Supervisor — <a href="https://scholar.google.com/citations?user=so_Apl4AAAAJ&hl=en" target="_blank" style="color:#1a6fc4;">Google Scholar</a>'
+    },
+    // Title
+    'page-title': {
+      fr: 'Évaluation expérimentale comparative de politiques d\'apprentissage par démonstration pour le désherbage robotisé par arrachage mécanique en environnement contrôlé',
+      en: 'Comparative Experimental Evaluation of Imitation Learning Policies for Robotic Mechanical Weed Pulling in a Controlled Environment'
+    },
+    // Buttons
+    'btn-paper-wip':   { fr: 'En cours',  en: 'In progress' },
+    'btn-code-wip':    { fr: 'Bientôt',   en: 'Soon' },
+    'btn-models':      { fr: 'Modèles',   en: 'Models' },
+    'btn-datasets':    { fr: 'Datasets',  en: 'Datasets' },
+    'btn-video':       { fr: 'Vidéo compilation', en: 'Video compilation' },
+    'open-source-note': {
+      fr: 'Modèles, Datasets et Résultats en <strong>Open Source</strong>. Explorez-les !',
+      en: 'Models, Datasets and Results are all <strong>Open Source</strong>. Check them out!'
+    },
+    // Video captions
+    'main-vid-title': {
+      fr: 'Compilation des 4 politiques évaluées — ACT, π₀, SmolVLA, XVLA',
+      en: 'Compilation of the 4 evaluated policies — ACT, π₀, SmolVLA, XVLA'
+    },
+    'main-vid-sub': {
+      fr: 'Bras robotique SO-101 · 400 épisodes de téléopération · Conditions C1–C4 · Laboratoire UQAR Lévis, salle 2063',
+      en: 'SO-101 robot arm · 400 teleoperation episodes · Conditions C1–C4 · UQAR Lévis Lab, room 2063'
+    },
+    'vid2-title': { fr: 'Ablation — Configuration 3 caméras', en: 'Ablation — 3-camera configuration' },
+    'vid2-sub':   { fr: 'Impact de l\'ajout d\'une vue top-down sur ACT en C2. Dégradation : 80 % → 60 %.', en: 'Impact of adding a top-down view on ACT in C2. Degradation: 80% → 60%.' },
+    'vid3-title': { fr: 'Déploiement embarqué — Jetson Orin Nano 8 GB', en: 'Embedded deployment — Jetson Orin Nano 8 GB' },
+    'vid3-sub':   { fr: 'Politique ACT à 30 Hz · Latence ~20 s/cycle · Succès C2 : 72 % (18/25).', en: 'ACT policy at 30 Hz · Latency ~20 s/cycle · C2 success: 72% (18/25).' },
+    // Section titles
+    'sec-other-videos':   { fr: 'Autres vidéos de démonstration', en: 'Other demonstration videos' },
+    'sec-abstract':       { fr: 'Résumé', en: 'Abstract' },
+    'sec-contributions':  { fr: 'Contributions principales', en: 'Main contributions' },
+    'sec-setup':          { fr: 'Dispositif expérimental', en: 'Experimental setup' },
+    'sec-conditions':     { fr: 'Conditions expérimentales', en: 'Experimental conditions' },
+    'sec-results':        { fr: 'Résultats', en: 'Results' },
+    'sec-ablation':       { fr: 'Ablation caméras & Déploiement embarqué', en: 'Camera ablation & Embedded deployment' },
+    'sec-models':         { fr: 'Modèles entraînés', en: 'Trained models' },
+    'sec-resources':      { fr: 'Ressources & Données', en: 'Resources & Data' },
+    'sec-citation':       { fr: 'Citation', en: 'Citation' },
+    'sec-acknowledgements': { fr: 'Remerciements', en: 'Acknowledgements' },
+    // Lang button label
+    'lang-btn': { fr: 'EN →', en: 'FR →' }
+  };
+
+  function applyLang(lang) {
+    currentLang = lang;
+    const fr = lang === 'fr';
+
+    // ── Brand ──
+    document.getElementById('brandText').innerHTML = translations['brand'][lang];
+
+    // ── Nav links (desktop + mobile via data-fr/data-en) ──
+    document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+      el.textContent = el.getAttribute('data-' + lang) || el.textContent;
+    });
+
+    // ── Hero ──
+    document.getElementById('heroTitle').textContent = translations['page-title'][lang];
+    document.getElementById('contribNote').innerHTML = translations['contrib-note'][lang];
+    document.getElementById('openSourceNote').innerHTML = translations['open-source-note'][lang];
+
+    // ── Video captions ──
+    document.getElementById('mainVidTitle').textContent = translations['main-vid-title'][lang];
+    document.getElementById('mainVidSub').textContent   = translations['main-vid-sub'][lang];
+    document.getElementById('vid2Title').textContent    = translations['vid2-title'][lang];
+    document.getElementById('vid2Sub').textContent      = translations['vid2-sub'][lang];
+    document.getElementById('vid3Title').textContent    = translations['vid3-title'][lang];
+    document.getElementById('vid3Sub').textContent      = translations['vid3-sub'][lang];
+
+    // ── Section titles ──
+    const secMap = {
+      'sec-other-videos':'sec-other-videos','sec-contributions':'sec-contributions',
+      'sec-setup':'sec-setup','sec-conditions':'sec-conditions',
+      'sec-results':'sec-results','sec-ablation-title':'sec-ablation',
+      'sec-models':'sec-models','sec-resources':'sec-resources',
+      'sec-citation-title':'sec-citation','sec-ack':'sec-acknowledgements'
+    };
+    Object.entries(secMap).forEach(([elId,key]) => {
+      const el = document.getElementById(elId);
+      if (el) el.textContent = translations[key][lang];
+    });
+
+    // ── Abstract ──
+    document.getElementById('abstract-fr').style.display = fr ? '' : 'none';
+    document.getElementById('abstract-en').style.display = fr ? 'none' : '';
+    document.getElementById('sec-abstract-title').textContent = translations['sec-abstract'][lang];
+
+    // ── Lang button ──
+    document.getElementById('langBtn').textContent = translations['lang-btn'][lang];
+
+    // ── Contributions ──
+    const c = {
+      contrib1: {
+        fr: '<strong>Protocole reproductible</strong> — 400 épisodes de démonstration, 4 conditions expérimentales (C1–C4), critère de succès formellement défini (saisie → arrachage → dépose → retour, ≤ 60 s). Données, modèles et résultats publiquement disponibles.',
+        en: '<strong>Reproducible protocol</strong> — 400 demonstration episodes, 4 experimental conditions (C1–C4), formally defined success criterion (grasp → pull → release → return, ≤ 60 s). Data, models and results publicly available.'
+      },
+      contrib2: {
+        fr: '<strong>Comparaison systématique</strong> — Évaluation de 4 politiques (ACT vs π₀, SmolVLA, XVLA) sur 400 essais contrôlés (25 essais × 4 conditions × 4 modèles).',
+        en: '<strong>Systematic comparison</strong> — Evaluation of 4 policies (ACT vs π₀, SmolVLA, XVLA) over 400 controlled trials (25 trials × 4 conditions × 4 models).'
+      },
+      contrib3: {
+        fr: '<strong>Ablation configuration visuelle</strong> — Quantification de l\'impact de l\'ajout d\'une vue top-down sur ACT (2 vs 3 caméras, −20 points de pourcentage en C2).',
+        en: '<strong>Visual configuration ablation</strong> — Quantification of the impact of adding a top-down view on ACT (2 vs 3 cameras, −20 percentage points in C2).'
+      },
+      contrib4: {
+        fr: '<strong>Évaluation embarquée</strong> — Déploiement d\'ACT sur NVIDIA Jetson Orin Nano 8 Go : taux de succès 72 %, latence ~20 s/cycle (×2,5 vs Desktop GPU), délai de démarrage 30 s.',
+        en: '<strong>Embedded evaluation</strong> — Deployment of ACT on NVIDIA Jetson Orin Nano 8 GB: 72% success rate, ~20 s/cycle latency (×2.5 vs Desktop GPU), 30 s startup delay.'
+      }
+    };
+    ['contrib1','contrib2','contrib3','contrib4'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = c[id][lang];
+    });
+
+    // ── Setup table ──
+    const t = (id, text) => { const el=document.getElementById(id); if(el) el.textContent=text; };
+    t('setup-th1', fr?'Élément':'Element');
+    t('setup-th2', fr?'Détail':'Detail');
+    t('setup-th3', fr?'Valeur':'Value');
+    t('setup-r1a', fr?'Robot':'Robot');
+    t('setup-r1b', fr?'SO-101 follower + leader (téléopération)':'SO-101 follower + leader (teleoperation)');
+    t('setup-r2a', fr?'Herbes & distracteurs':'Weeds & distractors');
+    t('setup-r2b', fr?'Répliques imprimées en 3D (environnement contrôlé)':'3D-printed replicas (controlled environment)');
+    t('setup-r3a', 'Dataset');
+    t('setup-r3b', fr?'Épisodes d\'entraînement valides collectés par téléopération':'Valid training episodes collected by teleoperation');
+    t('setup-r3c', fr?'400 épisodes':'400 episodes');
+    t('setup-r4a', fr?'Caméras':'Cameras');
+    t('setup-r4b', fr?'Eye-in-hand + Front (config. principale) · Top-down (ablation)':'Eye-in-hand + Front (main config.) · Top-down (ablation)');
+    t('setup-r5a', fr?'Plan d\'expérience':'Experiment plan');
+    t('setup-r5b', fr?'4 modèles × 4 conditions × 25 essais + ablation + Jetson':'4 models × 4 conditions × 25 trials + ablation + Jetson');
+    t('setup-r5c', fr?'450 tests':'450 tests');
+    t('setup-r6a', fr?'Plateformes':'Platforms');
+    t('setup-r6b', fr?'Desktop GPU · Serveur A100 UQAR (π₀) · Jetson Orin Nano 8 GB':'Desktop GPU · UQAR A100 server (π₀) · Jetson Orin Nano 8 GB');
+    t('setup-r7a', fr?'Budget temporel':'Time budget');
+    t('setup-r7b', fr?'Durée maximale par essai':'Maximum duration per trial');
+    t('setup-r7c', fr?'60 secondes':'60 seconds');
+    t('setup-fig-title', fr?'Figure — Dispositif expérimental':'Figure — Experimental setup');
+    t('setup-fig-sub', fr?'Bras SO-101, caméra eye-in-hand, surface de travail et herbes 3D. Labo UQAR Lévis, salle 2063.':'SO-101 arm, eye-in-hand camera, work surface and 3D weeds. UQAR Lévis Lab, room 2063.');
+
+    // ── Conditions table ──
+    t('cond-th1','Code'); t('cond-th2', fr?'Intitulé':'Name');
+    t('cond-th3', fr?'Description':'Description'); t('cond-th4', fr?'Difficulté':'Difficulty');
+    t('cond-c1-name', fr?'Herbe seule':'Single weed');
+    t('cond-c1-desc', fr?'Une seule herbe cible, positions variées, aucun distracteur':'Single target weed, varied positions, no distractors');
+    t('cond-c1-diff', fr?'🟢 Faible':'🟢 Low');
+    t('cond-c2-name', fr?'Herbe + Distracteurs':'Weed + Distractors');
+    t('cond-c2-desc', fr?'Une herbe cible + distracteurs, positions variées':'One target weed + distractors, varied positions');
+    t('cond-c2-diff', fr?'🟡 Modérée':'🟡 Moderate');
+    t('cond-c3-name', fr?'Plusieurs herbes ± distracteurs':'Multiple weeds ± distractors');
+    t('cond-c3-desc', fr?'Plusieurs herbes présentes, une seule cible désignée':'Multiple weeds present, only one target designated');
+    t('cond-c3-diff', fr?'🟠 Élevée':'🟠 High');
+    t('cond-c4-name', fr?'Herbes couchées et/ou distracteurs seuls':'Lying weeds and/or distractors only');
+    t('cond-c4-desc', fr?'Herbes couchées (orientation inédite) et/ou uniquement des distracteurs. Le démonstrateur restait immobile — comportement appris depuis les démonstrations.':'Lying weeds (novel orientation) and/or distractors only. Demonstrator remained stationary — behavior learned from demonstrations.');
+    t('cond-c4-diff', fr?'🔴 Difficile':'🔴 Difficult');
+
+    // ── Results ──
+    const resLabel = document.getElementById('results-label');
+    if (resLabel) resLabel.textContent = fr ? 'Taux de succès par modèle et condition (n / 25 essais)' : 'Success rate per model and condition (n / 25 trials)';
+
+    document.querySelectorAll('.sc .lbl').forEach((el,i) => {
+      const vfr=['78 / 100 essais','60 / 100 essais','39 / 100 essais','37 / 100 essais'];
+      const ven=['78 / 100 trials','60 / 100 trials','39 / 100 trials','37 / 100 trials'];
+      el.textContent = fr ? vfr[i] : ven[i];
+    });
+    document.querySelectorAll('.sc .rank').forEach((el,i) => {
+      const rfr=['🥇 1er','2ème','3ème','4ème'];
+      const ren=['🥇 1st','2nd','3rd','4th'];
+      el.textContent = fr ? rfr[i] : ren[i];
+    });
+
+    t('hm-th0', fr?'Modèle':'Model');
+    t('hm-th1', fr?'C1 — Herbe seule':'C1 — Single weed');
+    t('hm-th2', fr?'C2 — + Distracteurs':'C2 — + Distractors');
+    t('hm-th3', fr?'C3 — Plusieurs herbes':'C3 — Multiple weeds');
+    t('hm-th4', fr?'C4* — Herbes couchées':'C4* — Lying weeds');
+    t('hm-th5', fr?'Global / 100':'Overall / 100');
+
+    const hmNote = document.getElementById('hm-note');
+    if (hmNote) hmNote.textContent = fr
+      ? '* C4 : comportement immobile appris. SmolVLA / ACT / π₀ : robot immobile = codé succès. XVLA : tente d\'agir mais cible les distracteurs ronds.'
+      : '* C4: stationary behavior learned from demonstrations. SmolVLA / ACT / π₀: immobile robot = coded as success. XVLA: attempts action but targets round distractors.';
+
+    t('results-fig-title', fr?'Figure — Dégradation des performances selon la complexité (C1 → C4)':'Figure — Performance degradation with increasing complexity (C1 → C4)');
+
+    t('results-analysis-title', fr?'Analyse par condition :':'Per-condition analysis:');
+    const rab = document.getElementById('results-analysis-body');
+    if (rab) rab.innerHTML = fr
+      ? 'En <strong>C1</strong>, ACT atteint 92 % (23/25). En <strong>C2</strong>, π₀ se distingue avec 84 % (21/25), surpassant ACT. En <strong>C3</strong>, seul ACT maintient un taux acceptable (56 % — 14/25), tandis que π₀ s\'effondre à 8 % (2/25) et SmolVLA à 4 % (1/25). En <strong>C4</strong>, sans cette condition le classement XVLA (44 %) dépasse SmolVLA (22,7 %).'
+      : 'In <strong>C1</strong>, ACT reaches 92% (23/25). In <strong>C2</strong>, π₀ stands out with 84% (21/25), outperforming ACT. In <strong>C3</strong>, only ACT maintains an acceptable rate (56% — 14/25), while π₀ collapses to 8% (2/25) and SmolVLA to 4% (1/25). In <strong>C4</strong>, excluding this condition, XVLA (44%) outranks SmolVLA (22.7%).';
+
+    // ── Ablation ──
+    t('ablation-intro', fr?'Trois configurations comparées sur la condition C2 (25 essais chacune).':'Three configurations compared on condition C2 (25 trials each).');
+    t('abl-ref-badge', fr?'Référence':'Reference');
+    t('abl-platform-lbl', fr?'Plateforme':'Platform');
+    t('abl-cam-lbl', fr?'Caméras':'Cameras');
+    t('abl-success-lbl', fr?'Succès C2':'C2 success');
+    t('abl-latency-lbl', fr?'Latence moy.':'Avg. latency');
+    t('abl-start-lbl', fr?'Démarrage':'Startup');
+    t('abl1-start', fr?'Immédiat':'Immediate');
+    t('abl2-start', fr?'Immédiat':'Immediate');
+    t('abl-key-title', fr?'Résultats clés :':'Key findings:');
+    const akb = document.getElementById('abl-key-body');
+    if (akb) akb.innerHTML = fr
+      ? 'L\'ajout de la caméra top-down dégrade les performances de <strong>20 points</strong> (80 % → 60 %), indiquant que la vue supplémentaire constitue un bruit plutôt qu\'un apport informationnel. Sur Jetson Orin Nano, ACT conserve 72 % de succès avec une latence 2,5× supérieure. Un déploiement terrain reste envisageable.'
+      : 'Adding the top-down camera degrades performance by <strong>20 percentage points</strong> (80% → 60%), indicating that the additional view introduces noise rather than useful information. On Jetson Orin Nano, ACT preserves 72% success with 2.5× higher latency. Field deployment remains feasible.';
+
+    // ── Models table ──
+    t('mod-th1', fr?'Modèle':'Model'); t('mod-th2', fr?'Type':'Type');
+    t('mod-th5', fr?'Durée':'Duration');
+    t('mod-r1t', fr?'Visuomoteur BC + chunking':'Visuomotor BC + chunking');
+    t('mod-r3t', fr?'VLA Flow matching (PaliGemma)':'VLA Flow matching (PaliGemma)');
+    t('mod-r3s', fr?'15 000 retenus*':'15,000 retained*');
+    t('mod-r4t', fr?'VLA compact Flow matching**':'Compact VLA Flow matching**');
+    t('mod-r5t', fr?'VLA Soft prompts inter-embodiment**':'VLA Soft prompts cross-embodiment**');
+    document.querySelectorAll('#hf-see, [href="https://huggingface.co/kagyvro48"]').forEach(el => {
+      if (el.textContent.includes('Voir') || el.textContent.includes('See')) el.textContent = '🤗 ' + (fr?'Voir':'See');
+    });
+    t('mod-note1', fr
+      ? '* π₀ : 30 000 steps entraînés, checkpoint à 15 000 retenu (meilleure validation). lr = 2,5e-5, weight_decay = 0,01, dtype = bfloat16.'
+      : '* π₀: 30,000 steps trained, checkpoint at 15,000 retained (best validation). lr = 2.5e-5, weight_decay = 0.01, dtype = bfloat16.');
+    t('mod-note2', fr
+      ? '** SmolVLA & XVLA : freeze_vision_encoder = true, freeze_language_encoder = true, train_policy_transformer = true, action_mode = auto.'
+      : '** SmolVLA & XVLA: freeze_vision_encoder = true, freeze_language_encoder = true, train_policy_transformer = true, action_mode = auto.');
+
+    // ── Resources ──
+    t('res-train-title', fr?'Datasets d\'entraînement (HuggingFace)':'Training datasets (HuggingFace)');
+    t('ds1-title', fr?'2 caméras — principal':'2 cameras — main');
+    t('ds1-sub', fr?'Front + Eye-in-hand · 400 épisodes':'Front + Eye-in-hand · 400 episodes');
+    t('ds2-title', fr?'3 caméras — ablation':'3 cameras — ablation');
+    t('ds2-sub', fr?'Front + Eye + Top-down · 400 épisodes':'Front + Eye + Top-down · 400 episodes');
+    t('res-eval-title', fr?'Datasets d\'évaluation (HuggingFace)':'Evaluation datasets (HuggingFace)');
+    t('eval-th1', fr?'Modèle':'Model');
+    t('res-collect-title', fr?'Tables de collecte & Scènes':'Collection tables & Scenes');
+    t('coll-th1', fr?'Document':'Document'); t('coll-th2', fr?'Essais':'Trials'); t('coll-th3', fr?'Accès Google Drive':'Google Drive access');
+    t('coll-r1', fr?'ACT — C1 à C4':'ACT — C1 to C4'); t('coll-r1t', fr?'100 essais':'100 trials');
+    t('coll-r2', fr?'π₀ — C1 à C4':'π₀ — C1 to C4'); t('coll-r2t', fr?'100 essais':'100 trials');
+    t('coll-r3', fr?'SmolVLA — C1 à C4':'SmolVLA — C1 to C4'); t('coll-r3t', fr?'100 essais':'100 trials');
+    t('coll-r4', fr?'XVLA — C1 à C4':'XVLA — C1 to C4'); t('coll-r4t', fr?'100 essais':'100 trials');
+    t('coll-r5', fr?'ACT — Ablation 3 caméras / C2':'ACT — 3-camera ablation / C2'); t('coll-r5t', fr?'25 essais':'25 trials');
+    t('coll-r6', fr?'ACT — Jetson Orin Nano / C2':'ACT — Jetson Orin Nano / C2'); t('coll-r6t', fr?'25 essais':'25 trials');
+    ['wip1','wip2','wip3','wip4','wip5','wip6'].forEach(id => t(id, fr?'En cours':'In progress'));
+    t('res-note', fr
+      ? 'Datasets et modèles sur HuggingFace (profil : kagyvro48). Tables de collecte et scènes sur Google Drive (liens à venir).'
+      : 'Datasets and models on HuggingFace (profile: kagyvro48). Collection tables and scenes on Google Drive (links coming soon).');
+
+    // ── Citation ──
+    t('citation-note', fr
+      ? 'Article en cours de rédaction pour soumission (cible : revue Q1/Q2, ex. Computers and Electronics in Agriculture).'
+      : 'Article being prepared for submission (target: Q1/Q2 journal, e.g. Computers and Electronics in Agriculture).');
+    document.getElementById('copyBtn').textContent = fr ? 'Copier' : 'Copy';
+
+    // ── Acknowledgements ──
+    const ackEl = document.getElementById('ack-text');
+    if (ackEl) ackEl.innerHTML = fr
+      ? 'Ce travail a été réalisé au laboratoire de robotique de l\'<strong>Université du Québec à Rimouski (UQAR)</strong>, Campus de Lévis, salle 2063. Nous remercions l\'équipe de l\'UQAR pour l\'accès aux équipements et au serveur A100, ainsi que les contributeurs du projet <a href="https://github.com/huggingface/lerobot" target="_blank" style="color:var(--blue-link)">LeRobot (Hugging Face)</a> pour les outils open-source. La conception de cette page s\'est inspirée du projet <a href="https://xvla-tech.github.io/" target="_blank" style="color:var(--blue-link)">X-VLA</a>.'
+      : 'This work was carried out at the robotics laboratory of the <strong>Université du Québec à Rimouski (UQAR)</strong>, Lévis campus, room 2063. We thank the UQAR team for access to equipment and the A100 server, as well as the contributors of the <a href="https://github.com/huggingface/lerobot" target="_blank" style="color:var(--blue-link)">LeRobot (Hugging Face)</a> project for the open-source tools. The design of this page was inspired by the <a href="https://xvla-tech.github.io/" target="_blank" style="color:var(--blue-link)">X-VLA</a> project.';
+
+    // ── Figure captions ──
+    t('fig1-caption-text', fr
+      ? 'Schéma synoptique du workflow expérimental.'
+      : 'Overview of the experimental workflow.');
+    t('fig1-ph-title', fr ? 'Figure 1 — Schéma synoptique du workflow expérimental' : 'Figure 1 — Experimental workflow overview');
+    t('fig1-ph-lbl', fr ? 'Fichier : assets/figure1_workflow_ENG.svg — À déposer sur GitHub' : 'File: assets/figure1_workflow_ENG.svg — Upload to GitHub');
+    t('fig2-caption-text', fr
+      ? 'Dispositif expérimental utilisé pour la collecte de données et l\'évaluation : (<em>a</em>) poste de contrôle et bras leader SO-101 ; (<em>b</em>) espace de travail avec tuiles modulaires noires, cibles/distracteurs imprimés en 3D, bras follower SO-101 et caméras.'
+      : 'Experimental setup used for teleoperated data collection and evaluation: (<em>a</em>) control workstation and SO-101 leader arm; (<em>b</em>) workspace with black modular tiles, 3D-printed targets/distractors, SO-101 follower arm and cameras.');
+    const fig2capEl = document.getElementById('fig2-caption-text');
+    if (fig2capEl) fig2capEl.innerHTML = fr
+      ? 'Dispositif expérimental utilisé pour la collecte de données et l\'évaluation : (<em>a</em>) poste de contrôle et bras leader SO-101 ; (<em>b</em>) espace de travail avec tuiles modulaires noires, cibles/distracteurs imprimés en 3D, bras follower SO-101 et caméras.'
+      : 'Experimental setup used for teleoperated data collection and evaluation: (<em>a</em>) control workstation and SO-101 leader arm; (<em>b</em>) workspace with black modular tiles, 3D-printed targets/distractors, SO-101 follower arm and cameras.';
+    const fig2aCapEl = document.getElementById('fig2a-cap');
+    if (fig2aCapEl) fig2aCapEl.innerHTML = fr
+      ? '(<em>a</em>) Vue large du poste de contrôle et bras leader SO-101.'
+      : '(<em>a</em>) Wide view of the control workstation and SO-101 leader arm.';
+    const fig2bCapEl = document.getElementById('fig2b-cap');
+    if (fig2bCapEl) fig2bCapEl.innerHTML = fr
+      ? '(<em>b</em>) Gros plan de l\'espace de travail (tuiles noires), bras follower SO-101 et caméras.'
+      : '(<em>b</em>) Close-up of the workspace (black tiles), SO-101 follower arm and cameras.';
+
+    // ── Placeholder labels ──
+    document.querySelectorAll('.ph-label').forEach(el => {
+      el.textContent = fr ? 'Image à compléter — en cours' : 'Image to be added — in progress';
+    });
+
+    // ── Badge wip (data-fr/data-en) ──
+    document.querySelectorAll('.badge-wip[data-fr]').forEach(el => {
+      el.textContent = el.getAttribute('data-' + lang);
+    });
+  }
+
+  function toggleLang() {
+    applyLang(currentLang === 'en' ? 'fr' : 'en');
+  }
+
+  // ══ Abstract read-more (mobile) ══
+  function toggleAbstract(lang) {
+    const moreEl = document.getElementById('abstract-' + lang + '-more');
+    const btn    = document.getElementById('rmBtn-' + lang);
+    if (moreEl.style.display === 'none') {
+      moreEl.style.display = 'inline';
+      btn.style.display = 'none';
+    } else {
+      moreEl.style.display = 'none';
+      btn.style.display = 'inline';
+    }
+  }
+  // On desktop: show full abstract
+  function checkAbstractDisplay() {
+    const isMobile = window.innerWidth <= 700;
+    ['fr', 'en'].forEach(lang => {
+      const moreEl = document.getElementById('abstract-' + lang + '-more');
+      const btn    = document.getElementById('rmBtn-' + lang);
+      if (!moreEl || !btn) return;
+      if (!isMobile) {
+        moreEl.style.display = 'inline';
+        btn.style.display = 'none';
+      } else {
+        if (moreEl.style.display !== 'inline') {
+          moreEl.style.display = 'none';
+          btn.style.display = 'inline';
+        }
+      }
+    });
+  }
+  window.addEventListener('resize', checkAbstractDisplay);
+
+  // ══ Burger menu ══
+  const burger = document.getElementById('burgerBtn');
+  const menu   = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => menu.classList.toggle('open'));
+  document.addEventListener('click', e => {
+    if (!burger.contains(e.target) && !menu.contains(e.target) && !document.getElementById('langBtn').contains(e.target))
+      menu.classList.remove('open');
+  });
+
+  // ══ Smooth scroll ══
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (!t) return;
+      e.preventDefault();
+      menu.classList.remove('open');
+      setTimeout(() => t.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    });
+  });
+
+  // ══ Copy citation ══
+  document.getElementById('copyBtn').addEventListener('click', function () {
+    navigator.clipboard.writeText(document.getElementById('citeBlock').textContent).then(() => {
+      this.textContent = currentLang === 'fr' ? '✓ Copié !' : '✓ Copied!';
+      setTimeout(() => this.textContent = currentLang === 'fr' ? 'Copier' : 'Copy', 1800);
+    });
+  });
+
+  // Init: apply EN by default, then check abstract display
+  window.addEventListener('DOMContentLoaded', () => {
+    applyLang('en');
+    checkAbstractDisplay();
+  });
+</script>
+</body>
+</html>
