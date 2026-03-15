@@ -10,7 +10,7 @@
     ACT:     C1=92→69,  C2=80→124, C3=56→237, C4=84→105
     π0:      C1=72→162, C2=84→105, C3=8→462,  C4=76→143
     SmolVLA: C1=40→312, C2=24→387, C3=4→481,  C4=88→87
-    XVLA:    C1=60→218, C2=32→350, C3=40→312, C4=16→425
+    X-VLA:    C1=60→218, C2=32→350, C3=40→312, C4=16→425
   -->
 
   <!-- ═══ GRIDLINES & Y-AXIS ═══ -->
@@ -103,7 +103,7 @@
   <text x="894" y="73"  text-anchor="start"  font-size="13" fill="#e07b00" font-weight="bold">88%</text>
 
   <!-- ══════════════════════════════════
-       XVLA — green #1a8c3a
+       X-VLA — green #1a8c3a
   ══════════════════════════════════ -->
   <line x1="80"  y1="218" x2="347" y2="350" stroke="#1a8c3a" stroke-width="2.5"/>
   <line x1="347" y1="350" x2="613" y2="312" stroke="#1a8c3a" stroke-width="2.5"/>
@@ -132,10 +132,10 @@
   <line x1="934" y1="174" x2="958" y2="174" stroke="#e07b00" stroke-width="2.5"/>
   <circle cx="946" cy="174" r="5" fill="#e07b00" stroke="white" stroke-width="1.5"/>
   <text x="965" y="178" font-size="14" fill="#222">SmolVLA</text>
-  <!-- XVLA -->
+  <!-- X-VLA -->
   <line x1="934" y1="196" x2="958" y2="196" stroke="#1a8c3a" stroke-width="2.5"/>
   <circle cx="946" cy="196" r="5" fill="#1a8c3a" stroke="white" stroke-width="1.5"/>
-  <text x="965" y="200" font-size="14" fill="#222">XVLA</text>
+  <text x="965" y="200" font-size="14" fill="#222">X-VLA</text>
 
   <!-- ═══ FOOTER ═══ -->
   <line x1="80" y1="572" x2="880" y2="572" stroke="#e0e0e0" stroke-width="1"/>
